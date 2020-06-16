@@ -2,6 +2,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import DevLinks from '../screens/DevLinks';
+import TabNavigator from '../screens/TabNavigator';
 
 import Entry from '../screens/Entry';
 import Signup from '../screens/Signup';
@@ -20,6 +21,10 @@ const navigator = createStackNavigator(
 	{
         DevLinks: {
             screen: DevLinks,
+            navigationOptions: { headerShown: false }
+        },
+        TabNavigator: {
+            screen: TabNavigator,
             navigationOptions: { headerShown: false }
         },
         Entry: {

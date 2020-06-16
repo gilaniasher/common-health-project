@@ -6,6 +6,10 @@ export default function DevLinks(props) {
 		<SafeAreaView>
 			<Text>DevLinks</Text>
 			<Button
+				title='TabNavigator'
+				onPress={() => props.navigation.navigate('TabNavigator')}
+			/>
+			<Button
 				title='Entry'
 				onPress={() => props.navigation.navigate('Entry')}
 			/>
