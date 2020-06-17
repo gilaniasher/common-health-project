@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
 
@@ -7,7 +7,7 @@ const { width, height } = Dimensions.get('window');
 
 export default function Entry() {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Icon name='shield-cross' size={Math.min(width, height) / 1.5} color='#003366' />
 
             <View style={styles.separator} />
@@ -31,7 +31,7 @@ export default function Entry() {
             >
                 Login
             </AwesomeButtonRick>
-        </View>
+        </SafeAreaView>
     );
 }
 

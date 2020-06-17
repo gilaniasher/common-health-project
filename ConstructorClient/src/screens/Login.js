@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
 
@@ -8,7 +8,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Text style={styles.headerText}>Login</Text>
 
             <TextField 
@@ -37,7 +37,7 @@ export default function Login() {
             >
                 Login
             </AwesomeButtonRick>
-        </View>
+        </SafeAreaView>
     );
 }
 
