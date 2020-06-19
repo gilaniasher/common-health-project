@@ -13,7 +13,7 @@ import Notifications from '../screens/Notifications';
 
 import ConstructionEntry from '../screens/construction/ConstructionEntry';
 
-import Timeline from '../screens/Timeline';
+import TimelineScreen from '../screens/TimelineScreen';
 import Profile from '../screens/Profile';
 import Settings from '../screens/Settings';
 		
@@ -52,8 +52,8 @@ const navigator = createStackNavigator(
             screen: ConstructionEntry,
             navigationOptions: { headerShown: false }
         },
-        Timeline: {
-            screen: Timeline,
+        TimelineScreen: {
+            screen: TimelineScreen,
             navigationOptions: { headerShown: false }
         },
         Profile: {

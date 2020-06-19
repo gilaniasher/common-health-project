@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Dashboard from '../screens/Dashboard';
-import Timeline from '../screens/Timeline';
+import TimelineScreen from '../screens/TimelineScreen';
 import ConstructionEntry from '../screens/construction/ConstructionEntry';
 import Profile from '../screens/Profile';
 
@@ -14,7 +14,7 @@ const routeIcons = ({ route }) => ({
 
         if (route.name === 'Dashboard') {
             iconName = focused ? 'home' : 'home-outline';
-        } else if (route.name === 'Timeline') {
+        } else if (route.name === 'TimelineScreen') {
             iconName = focused ? 'calendar' : 'calendar-outline';
         } else if (route.name === 'Construction') {
             iconName = focused ? 'shield-cross' : 'shield-cross-outline'
@@ -37,7 +37,7 @@ export default function MyTabs() {
             screenOptions={routeIcons}
         >
             <Tab.Screen name="Dashboard" component={Dashboard} />
-            <Tab.Screen name="Timeline" component={Timeline} />
+            <Tab.Screen name="TimelineScreen" component={TimelineScreen} />
             <Tab.Screen name="Construction" component={ConstructionEntry} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>

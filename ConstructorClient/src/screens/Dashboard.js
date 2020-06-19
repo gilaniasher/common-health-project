@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, FlatList } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
+import NotificationBubble from '../components/NotificationBubble';
+import logo from '../images/logo.png';
 
 // Temp default values
 const initialName = 'Asher';
@@ -10,9 +12,13 @@ const initialOptedOut = false;
 const initialNotifications = [
     { id: 1, text: 'Shields delivered' },
     { id: 2, text: 'Driver has arrived' },
+    { id: 3, text: 'Cured cancer' },
+    { id: 4, text: 'Found world peace' },
+    { id: 5, text: 'Became the kung fu panda' },
+    { id: 6, text: 'Found nirvana' },
 ]
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     const [firstname, setFirstname] = useState(initialName);
     const [roundNumber, setRoundNumber] = useState(initialRoundNumber);
     const [assignedShields, setAssignedShields] = useState(initialAssignedShields);
@@ -25,14 +31,21 @@ export default function Dashboard() {
 
     const renderNotification = ({ item }) => {
         return (
-            <Text style={styles.normalText}>{item.text}</Text>
+            <NotificationBubble
+                text={item.text}
+                profImage={logo}
+            />
         );
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.bannerContainer}>
-                <Text style={styles.bannerHeaderText}>Hi {firstname}, for Round #{roundNumber}</Text>
+            <View style={styles.welcomeContainer}>
+                <Text style={styles.bannerHeaderText}>Welcome {firstname}</Text>
+            </View>
+
+            <View style={styles.progressContainer}>
+                <Text style={styles.headerText}>Shields Assigned This Round</Text>
 
                 <View style={styles.profileStatsContainer}>
                     <View style={styles.profileStats}>
@@ -47,26 +60,26 @@ export default function Dashboard() {
                         <Text style={styles.statsText}>Shields</Text>
                     </View>
                 </View>
+
+                <TouchableOpacity 
+                    style={styles.timelineContainer} 
+                    onPress={() => props.navigation.navigate('TimelineScreen')}
+                >
+                    <Text style={styles.timelineLeft}>Timeline Status</Text>
+                    <Text style={styles.timelineRight}>{'>'}</Text>
+                </TouchableOpacity>
             </View>
 
             <View style={styles.bottomContainer}>
-                <Text style={styles.normalText}>
-                {
-                    (optedOut) ? 
-                        "You aren't building shields for the next round :("
-                        : "You're building shields next round!"
-                }
-                </Text>
-
                 <AwesomeButtonRick 
                     type='anchor'
-                    onPress={() => console.log('Opt Out')}
+                    onPress={() => console.log('Construct shields')}
                     borderRadius={15}
                     stretch={true}
-                    backgroundColor={(optedOut) ? '#003366' : '#D3D3D3'}
-                    backgroundDarker={(optedOut) ? '#003366' : '#D3D3D3'}
+                    backgroundColor={'#003366'}
+                    backgroundDarker={'#003366'}
                 >
-                    Opt Out
+                    Construct Shields
                 </AwesomeButtonRick>
 
                 <View style={styles.verticalSpacer} />
@@ -90,45 +103,83 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    bannerContainer: {
+    welcomeContainer: {
         flex: 1,
         backgroundColor: '#003366',
         alignItems: 'center',
-        padding: 20
+        padding: 20,
+        paddingBottom: 0,
+        elevation: 10
     },
     bannerHeaderText: {
+        width: '100%',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 30
+        fontSize: 30,
+        textAlign: 'left'
     },
-    profileStatsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        padding: 20
+    headerText: {
+        width: '100%',
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'left',
+        paddingVertical: '5%',
+        paddingLeft: '5%'
+    },
+    progressContainer: {
+        flex: 3.5,
+        paddingBottom: 30
     },
     profileStats: {
-        flexDirection: 'column'
+        flexDirection: 'column',
+        paddingBottom: 20
+    },
+    profileStatsContainer: {
+        flexDirection: 'row'
     },
     verticalSeparator: {
+        height: '60%',
+        alignItems: 'center',
         borderLeftWidth: 1,
-        borderLeftColor: 'white',
+        borderLeftColor: 'black',
+        opacity: 0.5,
     },
     statsNumber: {
-        color: 'white',
         textAlign: 'center',
         fontWeight: 'bold',
         paddingHorizontal: '20%',
         fontSize: 35
     },
     statsText: {
-        color: 'white',
         textAlign: 'center',
         paddingHorizontal: '20%',
         fontSize: 15,
     },
+    timelineContainer: {
+        flexDirection: 'row',
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderTopColor: 'black',
+        borderBottomColor: 'black',
+        paddingVertical: 7
+    },
+    timelineLeft: {
+        flex: 1,
+        color: 'black',
+        fontSize: 20,
+        paddingLeft: 20
+    },
+    timelineRight: {
+        justifyContent: 'flex-end',
+        color: 'black',
+        fontSize: 20,
+        paddingRight: 20
+    },
     bottomContainer: {
-        flex: 3.5,
-        padding: 20
+        flex: 6,
+        paddingHorizontal: 15,
+        paddingTop: '5%',
+
     },
     normalText: {
         color: 'black',
@@ -140,6 +191,11 @@ const styles = StyleSheet.create({
         height: '8%'
     }, 
     notifications: {
-
+        borderWidth: 1,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderColor: 'rgba(128, 128, 128, 0.5)',
+        padding: 20,
+        paddingBottom: 0
     }
 });
