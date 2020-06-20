@@ -88,6 +88,8 @@ export default function Dashboard(props) {
                     Most Recent Notifications
                 </Text>
 
+                <View />
+
                 <FlatList 
                     data={notifications}
                     renderItem={renderNotification}
