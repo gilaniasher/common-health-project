@@ -11,11 +11,14 @@ import Login from '../screens/Login';
 import Dashboard from '../screens/Dashboard';
 import Notifications from '../screens/Notifications';
 
-import ConstructionEntry from '../screens/construction/ConstructionEntry';
-
 import TimelineScreen from '../screens/TimelineScreen';
 import Profile from '../screens/Profile';
 import Settings from '../screens/Settings';
+
+import ConstructionEntry from '../screens/construction/ConstructionEntry';
+import KitConfirmation from '../screens/construction/KitConfirmation';
+import ConstructionInstructions from '../screens/construction/ConstructionInstructions';
+import FinalQualityChecklist from '../screens/construction/FinalQualityChecklist';
 		
 const navigator = createStackNavigator(
 	{
@@ -64,6 +67,18 @@ const navigator = createStackNavigator(
             screen: Settings,
             navigationOptions: { headerShown: false }
         },
+        KitConfirmation: {
+            screen: KitConfirmation,
+            navigationOptions: { headerShown: false }
+        }, 
+        ConstructionInstructions: {
+            screen: ConstructionInstructions,
+            navigationOptions: { headerShown: false }
+        },
+        FinalQualityChecklist: {
+            screen: FinalQualityChecklist,
+            navigationOptions: { headerShown: false }
+        }
 	},
 	{
 		initialRouteName: 'DevLinks'

@@ -4,7 +4,7 @@ import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blu
 
 const initialAssignedShields = 40;
 
-export default function ConstructionEntry() {
+export default function ConstructionEntry(props) {
     const [assignedShields, setAssignedShields] = useState(initialAssignedShields);
     
     return (
@@ -34,15 +34,24 @@ export default function ConstructionEntry() {
             <View style={styles.bottomContainer}>
                 <Text style={[styles.normalText, {paddingLeft: 20}]}>Complete these three steps</Text>
 
-                <TouchableOpacity style={[styles.stepContainer, {borderBottomWidth: 0}]}>
+                <TouchableOpacity 
+                    style={[styles.stepContainer, {borderBottomWidth: 0}]}
+                    onPress={() => props.navigation.navigate('KitConfirmation')}
+                >
                     <Text style={styles.stepText}>1. Face Shield Kit Confirmation</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.stepContainer, {borderBottomWidth: 0}]}>
+                <TouchableOpacity 
+                    style={[styles.stepContainer, {borderBottomWidth: 0}]}
+                    onPress={() => props.navigation.navigate('ConstructionInstructions')}
+                >
                     <Text style={styles.stepText}>2. Construction Instructions</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.stepContainer}>
+                <TouchableOpacity 
+                    style={styles.stepContainer}
+                    onPress={() => props.navigation.navigate('FinalQualityChecklist')}
+                >
                     <Text style={styles.stepText}>3. Final Quality Checklist</Text>
                 </TouchableOpacity>
 
