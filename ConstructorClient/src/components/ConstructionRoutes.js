@@ -1,33 +1,23 @@
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import ConstructionEntry from '../screens/construction/ConstructionEntry';
 import KitConfirmation from '../screens/construction/KitConfirmation';
 import ConstructionInstructions from '../screens/construction/ConstructionInstructions';
 import FinalQualityChecklist from '../screens/construction/FinalQualityChecklist';
-		
-const ConstructionNavigator = createStackNavigator(
-	{
-        ConstructionEntry: {
-            screen: ConstructionEntry,
-            navigationOptions: { headerShown: false }
-        },
-        KitConfirmation: {
-            screen: KitConfirmation,
-            navigationOptions: { headerShown: false }
-        }, 
-        ConstructionInstructions: {
-            screen: ConstructionInstructions,
-            navigationOptions: { headerShown: false }
-        },
-        FinalQualityChecklist: {
-            screen: FinalQualityChecklist,
-            navigationOptions: { headerShown: false }
-        }
-	},
-	{
-		initialRouteName: 'ConstructionEntry'
-	}
-);
 
-export default ConstructionNavigator;
+const Stack = createStackNavigator();
+
+export default function ConstructionRoutes() {
+    return (
+        <NavigationContainer independent={true}>
+            <Stack.Navigator initialRouteName='ConstructionEntry'>
+                <Stack.Screen name='ConstructionEntry' component={ConstructionEntry} />
+                <Stack.Screen name='KitConfirmation' component={KitConfirmation} />
+                <Stack.Screen name='ConstructionInstructions' component={ConstructionInstructions} />
+                <Stack.Screen name='FinalQualityChecklist' component={FinalQualityChecklist} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
