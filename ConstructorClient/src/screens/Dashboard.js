@@ -63,7 +63,7 @@ export default function Dashboard(props) {
 
                 <TouchableOpacity 
                     style={styles.timelineContainer} 
-                    onPress={() => props.navigation.navigate('TimelineScreen')}
+                    onPress={() => props.navigation.navigate('Timeline')}
                 >
                     <Text style={styles.timelineLeft}>Timeline Status</Text>
                     <Text style={styles.timelineRight}>{'>'}</Text>

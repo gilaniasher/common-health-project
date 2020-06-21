@@ -15,10 +15,7 @@ import TimelineScreen from '../screens/TimelineScreen';
 import Profile from '../screens/Profile';
 import Settings from '../screens/Settings';
 
-import ConstructionEntry from '../screens/construction/ConstructionEntry';
-import KitConfirmation from '../screens/construction/KitConfirmation';
-import ConstructionInstructions from '../screens/construction/ConstructionInstructions';
-import FinalQualityChecklist from '../screens/construction/FinalQualityChecklist';
+import ConstructionRoutes from '../components/ConstructionRoutes';
 		
 const navigator = createStackNavigator(
 	{
@@ -42,17 +39,12 @@ const navigator = createStackNavigator(
             screen: Login,
             navigationOptions: { headerShown: false }
         },
-
         Dashboard: {
             screen: Dashboard,
             navigationOptions: { headerShown: false }
         },
         Notifications: {
             screen: Notifications,
-            navigationOptions: { headerShown: false }
-        },
-        ConstructionEntry: {
-            screen: ConstructionEntry,
             navigationOptions: { headerShown: false }
         },
         TimelineScreen: {
@@ -67,16 +59,8 @@ const navigator = createStackNavigator(
             screen: Settings,
             navigationOptions: { headerShown: false }
         },
-        KitConfirmation: {
-            screen: KitConfirmation,
-            navigationOptions: { headerShown: false }
-        }, 
-        ConstructionInstructions: {
-            screen: ConstructionInstructions,
-            navigationOptions: { headerShown: false }
-        },
-        FinalQualityChecklist: {
-            screen: FinalQualityChecklist,
+        ConstructionRoutes: {
+            screen: ConstructionRoutes,
             navigationOptions: { headerShown: false }
         }
 	},

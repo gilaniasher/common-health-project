@@ -30,8 +30,8 @@ export default function DevLinks(props) {
 				onPress={() => props.navigation.navigate('Notifications')}
 			/>
 			<Button
-				title='ConstructionEntry'
-				onPress={() => props.navigation.navigate('ConstructionEntry')}
+				title='ConstructionRoutes'
+				onPress={() => props.navigation.navigate('ConstructionRoutes')}
 			/>
 			<Button
 				title='Timeline'
