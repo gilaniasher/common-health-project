@@ -1,5 +1,6 @@
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import DevLinks from '../screens/DevLinks';
 import TabNavigator from '../screens/TabNavigator';
@@ -16,57 +17,25 @@ import Profile from '../screens/Profile';
 import Settings from '../screens/Settings';
 
 import ConstructionRoutes from '../components/ConstructionRoutes';
-		
-const navigator = createStackNavigator(
-	{
-        DevLinks: {
-            screen: DevLinks,
-            navigationOptions: { headerShown: false }
-        },
-        TabNavigator: {
-            screen: TabNavigator,
-            navigationOptions: { headerShown: false }
-        },
-        Entry: {
-            screen: Entry,
-            navigationOptions: { headerShown: false }
-        },
-        Signup: {
-            screen: Signup,
-            navigationOptions: { headerShown: false }
-        },
-        Login: {
-            screen: Login,
-            navigationOptions: { headerShown: false }
-        },
-        Dashboard: {
-            screen: Dashboard,
-            navigationOptions: { headerShown: false }
-        },
-        Notifications: {
-            screen: Notifications,
-            navigationOptions: { headerShown: false }
-        },
-        TimelineScreen: {
-            screen: TimelineScreen,
-            navigationOptions: { headerShown: false }
-        },
-        Profile: {
-            screen: Profile,
-            navigationOptions: { headerShown: false }
-        },
-        Settings: {
-            screen: Settings,
-            navigationOptions: { headerShown: false }
-        },
-        ConstructionRoutes: {
-            screen: ConstructionRoutes,
-            navigationOptions: { headerShown: false }
-        }
-	},
-	{
-		initialRouteName: 'DevLinks'
-	}
-);
 
-export default createAppContainer(navigator);
+const Stack = createStackNavigator();
+
+export default function Routes() {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName='DevLinks' screenOptions={{ headerShown: false }}>
+                <Stack.Screen name='DevLinks' component={DevLinks} />
+                <Stack.Screen name='TabNavigator' component={TabNavigator} />
+                <Stack.Screen name='Entry' component={Entry} />
+                <Stack.Screen name='Signup' component={Signup} />
+                <Stack.Screen name='Login' component={Login} />
+                <Stack.Screen name='Dashboard' component={Dashboard} />
+                <Stack.Screen name='Notifications' component={Notifications} />
+                <Stack.Screen name='TimelineScreen' component={TimelineScreen} />
+                <Stack.Screen name='Profile' component={Profile} />
+                <Stack.Screen name='Settings' component={Settings} />
+                <Stack.Screen name='ConstructionRoutes' component={ConstructionRoutes} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}

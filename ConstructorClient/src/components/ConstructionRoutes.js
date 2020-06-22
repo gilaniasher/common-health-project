@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 export default function ConstructionRoutes() {
     return (
         <NavigationContainer independent={true}>
-            <Stack.Navigator initialRouteName='ConstructionEntry'>
+            <Stack.Navigator initialRouteName='ConstructionEntry' screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='ConstructionEntry' component={ConstructionEntry} />
                 <Stack.Screen name='KitConfirmation' component={KitConfirmation} />
                 <Stack.Screen name='ConstructionInstructions' component={ConstructionInstructions} />
