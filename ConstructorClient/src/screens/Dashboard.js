@@ -73,7 +73,7 @@ export default function Dashboard(props) {
             <View style={styles.bottomContainer}>
                 <AwesomeButtonRick 
                     type='anchor'
-                    onPress={() => console.log('Construct shields')}
+                    onPress={() => props.navigation.navigate('Construction')}
                     borderRadius={15}
                     stretch={true}
                     backgroundColor={'#003366'}
@@ -84,9 +84,10 @@ export default function Dashboard(props) {
 
                 <View style={styles.verticalSpacer} />
 
-                <Text style={styles.normalText}>
-                    Most Recent Notifications
-                </Text>
+                <TouchableOpacity style={styles.notificationsHeader} onPress={() => props.navigation.navigate('Notifications')}>
+                    <Text style={[styles.normalText, {flex: 1}]}>Most Recent Notifications</Text>
+                    <Text style={[styles.normalText, {justifyContent: 'flex-end'}]}>{'>'}</Text>
+                </TouchableOpacity>
 
                 <View />
 
@@ -185,13 +186,18 @@ const styles = StyleSheet.create({
     },
     normalText: {
         color: 'black',
-        fontSize: 16,
+        fontSize: 18,
         textAlign: 'center',
         paddingBottom: 20
     },
     verticalSpacer: {
         height: '8%'
     }, 
+    notificationsHeader: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      width: '100%'
+    },
     notifications: {
         borderWidth: 1,
         borderTopLeftRadius: 20,

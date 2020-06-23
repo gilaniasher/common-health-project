@@ -82,8 +82,7 @@ const styles = StyleSheet.create({
         flex: 9,
         alignItems: 'center',
         justifyContent: 'space-around',
-        borderWidth: 2,
-        borderColor: 'black'
+        padding: 5
     }, 
     container: {
         flex: 1,

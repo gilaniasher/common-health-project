@@ -9,7 +9,7 @@ import Entry from '../screens/Entry';
 import Signup from '../screens/Signup';
 import Login from '../screens/Login';
 
-import Dashboard from '../screens/Dashboard';
+import DashboardRoutes from '../components/DashboardRoutes';
 import Notifications from '../screens/Notifications';
 
 import TimelineScreen from '../screens/TimelineScreen';
@@ -29,7 +29,7 @@ export default function Routes() {
                 <Stack.Screen name='Entry' component={Entry} />
                 <Stack.Screen name='Signup' component={Signup} />
                 <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='Dashboard' component={Dashboard} />
+                <Stack.Screen name='DashboardRoutes' component={DashboardRoutes} />
                 <Stack.Screen name='Notifications' component={Notifications} />
                 <Stack.Screen name='TimelineScreen' component={TimelineScreen} />
                 <Stack.Screen name='Profile' component={Profile} />

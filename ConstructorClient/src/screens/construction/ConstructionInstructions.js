@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
 
 export default function ConstructionInstructions(props) {
     return (
@@ -13,7 +14,46 @@ export default function ConstructionInstructions(props) {
             </View>
 
             <View style={styles.bottomContainer}>
-                <Text>Hello</Text>
+                <TouchableOpacity 
+                    style={[styles.stepContainer, {borderBottomWidth: 0}]}
+                    onPress={() => props.navigation.navigate('TutorialSteps')}
+                >
+                    <Text style={styles.stepText}>Step-By-Step Tutorial</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={[styles.stepContainer, {borderBottomWidth: 0}]}
+                    onPress={() => props.navigation.navigate('TutorialVideo')}
+                >
+                    <Text style={styles.stepText}>Full Video Tutorial</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={[styles.stepContainer, {borderBottomWidth: 0}]}
+                    onPress={() => props.navigation.navigate('TutorialTips')}
+                >
+                    <Text style={styles.stepText}>Construction Tips</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={styles.stepContainer}
+                    onPress={() => props.navigation.navigate('BrokenShieldForm')}
+                >
+                    <Text style={styles.stepText}>Report Broken Shield</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.buttonContainer}>
+                <AwesomeButtonRick 
+                    type='anchor'
+                    onPress={() => props.navigation.navigate('FinalQualityChecklist')}
+                    borderRadius={15}
+                    stretch={true}
+                    backgroundColor={'#003366'}
+                    backgroundDarker={'#003366'}
+                >
+                    Proceed to Final Checklist
+                </AwesomeButtonRick>
             </View>
         </SafeAreaView>
     );
@@ -40,7 +80,24 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     bottomContainer: {
-        flex: 9.5,
-        padding: 20
+        flex: 6,
+        paddingTop: '10%',
+        justifyContent: 'center'
+    },
+    stepText: {
+        fontSize: 25,
+        paddingHorizontal: 20,
+        textAlign: 'center'
+    },
+    stepContainer: {
+        paddingVertical: '5%',
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: 'rgba(0, 0, 0, 0.3)',
+    },
+    buttonContainer: {
+        flex: 3.5,
+        justifyContent: 'center',
+        paddingHorizontal: 20
     }
 });

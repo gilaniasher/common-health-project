@@ -23,7 +23,7 @@ export default function DevLinks(props) {
 			/>
 			<Button
 				title='Dashboard'
-				onPress={() => props.navigation.navigate('Dashboard')}
+				onPress={() => props.navigation.navigate('DashboardRoutes')}
 			/>
 			<Button
 				title='Notifications'

@@ -1,9 +1,8 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Dashboard from '../screens/Dashboard';
+import DashboardRoutes from '../components/DashboardRoutes';
 import TimelineScreen from '../screens/TimelineScreen';
 import ConstructionRoutes from '../components/ConstructionRoutes';
 import Profile from '../screens/Profile';
@@ -30,17 +29,15 @@ const Tab = createMaterialBottomTabNavigator();
 
 export default function MyTabs() {
   return (
-    <NavigationContainer independent={true}>
-        <Tab.Navigator
-            initialRouteName="Dashboard"
-            barStyle={{ backgroundColor: '#003366'}}
-            screenOptions={routeIcons}
-        >
-            <Tab.Screen name="Dashboard" component={Dashboard} />
-            <Tab.Screen name="Timeline" component={TimelineScreen} />
-            <Tab.Screen name="Construction" component={ConstructionRoutes} />
-            <Tab.Screen name="Profile" component={Profile} />
-        </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator
+        initialRouteName="Dashboard"
+        barStyle={{ backgroundColor: '#003366'}}
+        screenOptions={routeIcons}
+    >
+        <Tab.Screen name="Dashboard" component={DashboardRoutes} />
+        <Tab.Screen name="Timeline" component={TimelineScreen} />
+        <Tab.Screen name="Construction" component={ConstructionRoutes} />
+        <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
   );
 }

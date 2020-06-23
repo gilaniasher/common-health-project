@@ -1,60 +1,72 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function Notifications() {
+export default function Notifications(props) {
 
     const data = [
         {
+            id: 1,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 2,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 3,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 4,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 5,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 6,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 7,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 8,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 9,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 10,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
         },
         {
+            id: 11,
             selected: false,
             notification: 'Lorem ipsum dolor sit amet, consetetur sadip scing elitr, sed diam nonumy eirmod',
             time: '8:00 am today'
@@ -64,6 +76,9 @@ export default function Notifications() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.titleContainer}>
+                <TouchableOpacity onPress={() => props.navigation.goBack()} style={styles.backButton}>
+                    <Icon name='ios-arrow-back' size={28} color='white' />
+                </TouchableOpacity>
                 <Text style={styles.titleText}>Notifications</Text>
             </View>
             <View style={styles.notificationList}>
@@ -99,9 +114,14 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         flex: 1,
+        flexDirection: 'row',
         borderBottomColor: 'gray',
         borderBottomWidth: 1,
-        backgroundColor: '#003366'
+        backgroundColor: '#003366',
+    },
+    backButton: {
+        paddingTop: '9%',
+        paddingLeft: '5%'
     },
     titleText: {
         marginTop: '8%',
