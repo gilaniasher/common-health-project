@@ -1,7 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
 
 export default function ConstructionInstructions(props) {
     return (
@@ -29,31 +28,11 @@ export default function ConstructionInstructions(props) {
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    style={[styles.stepContainer, {borderBottomWidth: 0}]}
+                    style={styles.stepContainer}
                     onPress={() => props.navigation.navigate('TutorialTips')}
                 >
                     <Text style={styles.stepText}>Construction Tips</Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity 
-                    style={styles.stepContainer}
-                    onPress={() => props.navigation.navigate('BrokenShieldForm')}
-                >
-                    <Text style={styles.stepText}>Report Broken Shield</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.buttonContainer}>
-                <AwesomeButtonRick 
-                    type='anchor'
-                    onPress={() => props.navigation.navigate('FinalQualityChecklist')}
-                    borderRadius={15}
-                    stretch={true}
-                    backgroundColor={'#003366'}
-                    backgroundDarker={'#003366'}
-                >
-                    Proceed to Final Checklist
-                </AwesomeButtonRick>
             </View>
         </SafeAreaView>
     );
@@ -81,7 +60,6 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         flex: 6,
-        paddingTop: '10%',
         justifyContent: 'center'
     },
     stepText: {

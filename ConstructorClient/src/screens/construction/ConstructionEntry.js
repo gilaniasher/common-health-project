@@ -58,7 +58,7 @@ export default function ConstructionEntry(props) {
                 <View style={{paddingTop: '8%', paddingHorizontal: 20}}>
                     <AwesomeButtonRick 
                         type='anchor'
-                        onPress={() => console.log('Report Broken Shield')}
+                        onPress={() => props.navigation.navigate('BrokenShieldForm')}
                         borderRadius={15}
                         stretch={true}
                         backgroundColor={'#003366'}

@@ -64,7 +64,7 @@ export default function Profile() {
 
 const styles = StyleSheet.create({
     header: {
-        flex: 1,
+        flex: 1.2,
         backgroundColor: '#003366',
         alignItems: 'center'  
     },
@@ -75,11 +75,12 @@ const styles = StyleSheet.create({
         lineHeight: 49,
         color: '#FFFFFF',
         fontSize: 36,
+        fontWeight: 'bold',
         justifyContent: 'center',
         alignItems: 'center',
     }, 
     maincontainer: {
-        flex: 9,
+        flex: 9.5,
         alignItems: 'center',
         justifyContent: 'space-around',
         padding: 5
