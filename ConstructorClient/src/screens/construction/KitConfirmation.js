@@ -1,13 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 export default function KitConfirmation() {
     return (
-        <View>
-            <Text>Kit Confirmation</Text>
-        </View>
+        <WebView 
+            source={{ 
+                uri: 'https://docs.google.com/forms/d/e/1FAIpQLSe7nb3sncAcumy5pZoD9d0qE0AThJlsYF-MVY-laZV1Z4UX8g/viewform'
+            }}
+        />
     );
 }
-
-const styles = StyleSheet.create({
-});
