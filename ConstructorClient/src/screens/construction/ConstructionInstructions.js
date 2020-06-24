@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     bottomContainer: {
-        flex: 6,
+        flex: 9.5,
         justifyContent: 'center'
     },
     stepText: {
@@ -68,14 +68,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     stepContainer: {
-        paddingVertical: '5%',
+        paddingVertical: '10%',
         borderTopWidth: 1,
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.3)',
-    },
-    buttonContainer: {
-        flex: 3.5,
-        justifyContent: 'center',
-        paddingHorizontal: 20
     }
 });
