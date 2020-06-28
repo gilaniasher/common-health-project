@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CHP Lambda Function Backend
+Globals:
+  Function:
+    Timeout: 30
+Resources:
+  AuthenticateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: authenticate_user/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        AuthenticateUser:
+          Type: Api
+          Properties:
+            Path: /AuthenticateUser
+            Method: post
+Outputs:
+  AuthenticateUserApi:
+    Description: API Gateway AuthenticateUser for CHP
+    Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/AuthenticateUser
+  AuthenticateUserFunction:
+    Description: AuthenticateUser Lambda Function ARN
+    Value: AuthenticateUserFunction.Arn
+  AuthenticateUserRequestIamRole:
+    Description: Implicit IAM Role created for AuthenticateUser Request function
+    Value: AuthenticateUserFunctionRole.Arn
