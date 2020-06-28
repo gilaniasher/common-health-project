@@ -1,33 +1,31 @@
 import json
 import psycopg2
+import boto3
 
-def lambda_handler(event, context):
-    name = event['queryStringParameters']['name']
-    address = event['queryStringParameters']['address']
-    county = event['queryStringParameters']['county']
-    phone_number = event['queryStringParameters']['phone_number']
-    email = event['queryStringParameters']['email']
-    passhash = event['queryStringParameters']['passhash']
-    driver_id = 1
+def get_secret():
+    try:
+        session = boto3.session.Session()
+        client = session.client(service_name='secretsmanager', region_name='us-east-2')
+        get_secret_value_response = client.get_secret_value(SecretId='dev/CHP/postgres')
+        secret = get_secret_value_response['SecretString']
+    except Exception as e:
+        return 500, f'Secret Manager Error: {e}'
+    else:
+        return 200, json.loads(secret)
+
+def run_query(query, vals):
+    status, secret = get_secret()
+
+    if status == 500:
+        return status, secret
 
     conn = None
     cur = None
 
     try:
-        conn = psycopg2.connect(
-            host='', 
-            database='', 
-            user='', 
-            password=''
-        )
+        conn = psycopg2.connect(host=secret['host'], database=secret['dbname'], user=secret['username'], password=secret['password'])
         cur = conn.cursor()
-
-        query = '''
-        INSERT INTO constructors (name, address, county, phone_number, email, passhash, driver_id)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
-        '''
-
-        cur.execute(query, (name, address, county, phone_number, email, passhash, driver_id))
+        cur.execute(query, vals)
         conn.commit()
     except Exception as e:
         status = 500
@@ -38,6 +36,18 @@ def lambda_handler(event, context):
     finally:
         if cur is not None: cur.close()
         if conn is not None: conn.close()
+
+    return status, msg
+
+def lambda_handler(event, context):
+    query = '''
+    INSERT INTO constructors (name, address, county, phone_number, email, passhash, driver_id)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
+    '''
+
+    params = event['queryStringParameters']
+    vals = (params['name'], params['address'], params['county'], params['phone_number'], params['email'], params['passhash'], 1)
+    status, msg = run_query(query, vals)
 
     return {
         'statusCode': status,
