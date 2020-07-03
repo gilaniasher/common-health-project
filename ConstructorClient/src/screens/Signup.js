@@ -2,52 +2,97 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
+import auth from '@react-native-firebase/auth';
 
 export default function Signup() {
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [state, setState] = useState({
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: ''
+    })
+
+    const changeState = (id, val) => {
+        setState(prevState => ({
+            ...prevState,
+            [id]: val
+        }))
+    }
+
+    const signup = () => {
+        let valid = true
+
+        Object.entries(state).forEach(([key, value]) => {
+            if (value === '') {
+                valid = false
+                console.log(`${key} is not defined`)
+            }
+        })
+
+        if (valid) {
+            auth()
+                .createUserWithEmailAndPassword(state.email, state.password)
+                .then(() => {
+                    console.log('User account created & signed in!');
+                })
+                .catch(error => {
+                    if (error.code === 'auth/email-already-in-use') {
+                        console.log('That email address is already in use!');
+                    }
+
+                    if (error.code === 'auth/invalid-email') {
+                        console.log('That email address is invalid!');
+                    }
+
+                    console.error(error);
+                });
+
+            console.log(state.firstname)
+            console.log(state.lastname)
+            console.log(state.email)
+            console.log(state.password)
+        }
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.headerText}>Sign Up</Text>
 
-            <TextField 
+            <TextField
                 label='First Name'
                 textColor='#003366'
                 tintColor='#003366'
                 baseColor='#003366'
-                onChangeText={setFirstname}
+                onChangeText={(msg) => changeState('firstname', msg)}
             />
-            <TextField 
+            <TextField
                 label='Last Name'
                 textColor='#003366'
                 tintColor='#003366'
                 baseColor='#003366'
-                onChangeText={setLastname}
+                onChangeText={(msg) => changeState('lastname', msg)}
             />
-            <TextField 
+            <TextField
                 label='Email'
                 textColor='#003366'
                 tintColor='#003366'
                 baseColor='#003366'
-                onChangeText={setEmail}
+                onChangeText={(msg) => changeState('email', msg)}
             />
-            <TextField 
+            <TextField
                 label='Password'
                 textColor='#003366'
                 tintColor='#003366'
                 baseColor='#003366'
-                onChangeText={setPassword}
+                onChangeText={(msg) => changeState('password', msg)}
                 secureTextEntry={true}
             />
 
             <View style={styles.separator} />
 
-            <AwesomeButtonRick 
+            <AwesomeButtonRick
                 type='anchor'
-                onPress={() => console.log(password)}
+                onPress={signup}
                 borderRadius={20}
                 stretch={true}
             >

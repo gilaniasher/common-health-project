@@ -1,7 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
+import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native'
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import auth from '@react-native-firebase/auth'
 
-export default function Profile() {
+export default function Profile(props) {
+    const signout = () => {
+        auth()
+            .signOut()
+            .then(() => {
+                console.log('User signed out')
+                props.navigation.navigate('Login')
+            })
+    }
+
     return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
             <View style={styles.header}>
@@ -27,6 +38,7 @@ export default function Profile() {
                         </View>
                     </View>
                 </View>
+
                 <View style={styles.progressContainer}>
                     <Text style={styles.headerText}>Total Shield Records</Text>
 
@@ -44,6 +56,7 @@ export default function Profile() {
                         </View>
                     </View>
                 </View>
+                
                 <View style={{flex: 3}}>
                     <Text style={styles.headerText}>You are building shields next round</Text>
                     <TouchableOpacity style={styles.buttonContainer}>
@@ -57,6 +70,17 @@ export default function Profile() {
             			</Text>
 					</TouchableOpacity>
                 </View>
+
+                <AwesomeButtonRick
+                    type='anchor'
+                    onPress={signout}
+                    borderRadius={20}
+                    stretch={true}
+                    backgroundColor={'#003366'}
+                    backgroundDarker={'#003366'}
+                >
+                    Sign Out
+                </AwesomeButtonRick>
             </View>
         </View>
     );
@@ -66,7 +90,7 @@ const styles = StyleSheet.create({
     header: {
         flex: 1.2,
         backgroundColor: '#003366',
-        alignItems: 'center'  
+        alignItems: 'center'
     },
     title: {
         marginTop: Platform.OS == 'ios' ? '20%' : '1%',
@@ -83,7 +107,7 @@ const styles = StyleSheet.create({
         flex: 9.5,
         alignItems: 'center',
         justifyContent: 'space-around',
-        padding: 5
+        padding: 20
     }, 
     container: {
         flex: 1,
@@ -94,7 +118,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'left',
         paddingVertical: '5%',
-        paddingLeft: '5%',
+        paddingHorizontal: '5%',
     },
     progressContainer: {
         flex: 1.5,
