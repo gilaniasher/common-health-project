@@ -5,7 +5,7 @@ import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blu
 
 const { width, height } = Dimensions.get('window');
 
-export default function Entry() {
+export default function Entry(props) {
     return (
         <SafeAreaView style={styles.container}>
             <Icon name='shield-cross' size={Math.min(width, height) / 1.5} color='#003366' />
@@ -14,7 +14,7 @@ export default function Entry() {
 
             <AwesomeButtonRick 
                 type='anchor'
-                onPress={() => console.log('Sign Up')}
+                onPress={() => props.navigation.navigate('Signup')}
                 borderRadius={20}
                 stretch={true}
             >
@@ -25,7 +25,7 @@ export default function Entry() {
 
             <AwesomeButtonRick 
                 type='anchor'
-                onPress={() => console.log('Login')}
+                onPress={() => props.navigation.navigate('Login')}
                 borderRadius={20}
                 stretch={true}
             >

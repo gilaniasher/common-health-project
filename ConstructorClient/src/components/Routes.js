@@ -2,7 +2,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import DevLinks from '../screens/DevLinks';
 import TabNavigator from '../screens/TabNavigator';
 
 import Entry from '../screens/Entry';
@@ -23,8 +22,7 @@ const Stack = createStackNavigator();
 export default function Routes() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='DevLinks' screenOptions={{ headerShown: false }}>
-                <Stack.Screen name='DevLinks' component={DevLinks} />
+            <Stack.Navigator initialRouteName='Entry' screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='TabNavigator' component={TabNavigator} />
                 <Stack.Screen name='Entry' component={Entry} />
                 <Stack.Screen name='Signup' component={Signup} />
