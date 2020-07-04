@@ -4,7 +4,7 @@ import { TextField } from 'react-native-material-textfield'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import { signup } from '../actions/Authentication'
 
-export default function Signup() {
+export default function Signup(props) {
     const [signupDisabled, setSignupDisabled] = useState(true)
     const [state, setState] = useState({
         firstname: '',
@@ -31,7 +31,7 @@ export default function Signup() {
             county: state.county,
             phone: state.phone,
             password: state.password
-        })
+        }, props.navigation)
     }
 
     useEffect(() => {

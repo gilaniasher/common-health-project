@@ -1,30 +1,6 @@
 import json
 import psycopg2
 import boto3
-import firebase_admin
-
-def get_firebase_creds():
-    try:
-        session = boto3.session.Session()
-        client = session.client(service_name='secretsmanager', region_name='us-east-2')
-        get_secret_value_response = client.get_secret_value(SecretId='dev/CHP/firebase')
-        secret = get_secret_value_response['SecretString']
-    except Exception as e:
-        return 500, f'Secret Manager Error: {e}'
-    else:
-        return 200, json.loads(secret)
-
-def verify_jwt(token):
-    status, secret = get_firebase_creds()
-
-    if status == 500:
-        return status, secret
-
-    cred = firebase_admin.credentials.Certificate(secret)
-    firebase_admin.initialize_app(cred)
-    decoded_token = firebase_admin.auth.verify_id_token(token)
-    
-    return decoded_token['uid']
 
 def get_db_secret():
     try:
@@ -64,16 +40,16 @@ def run_query(query, vals):
     return status, msg
 
 def lambda_handler(event, context):
-    params = event['queryStringParameters']
-    uid = verify_jwt(params['token'])
-    
     query = '''
     INSERT INTO constructors (id, name, address, county, phone_number, email, driver_id)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
     '''
 
+    print(event)
+    params = event['queryStringParameters']
+
     vals = (
-        uid,
+        params['uid'],
         params['name'],
         params['address'],
         params['county'],

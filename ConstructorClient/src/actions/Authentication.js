@@ -1,37 +1,40 @@
 import auth from '@react-native-firebase/auth'
-const endpoint = 'http://127.0.0.1:3000'
+const endpoint = 'http://10.0.2.2:3000'
 
-const customSignup = async (userInfo, token) => {
+const customSignup = (userInfo, uid, navigation) => {
+    const url = `${endpoint}/Signup?` + new URLSearchParams({
+        uid: uid,
+        name: userInfo.name,
+        address: userInfo.address,
+        county: userInfo.county,
+        phone_number: userInfo.phone,
+        email: userInfo.email
+    })
+
     // Create user in our own custom RDS database
-    const res = await fetch(
-        `${endpoint}/Signup?
-            name=${userInfo.name}&
-            address=${userInfo.address}&
-            county=${userInfo.county}&
-            phone_number=${userInfo.phone}&
-            email=${userInfo.email}&
-            token=${token}
-        `,
-        { method: 'POST' }
-    )
-
-    return (res.status === 200) ? 200 : 500
+    fetch(url, { method: 'POST' })
+        .then(() => {
+            console.log('User created in custom backend')
+            navigation.navigate('TabNavigator')
+        })
+        .catch(err => {
+            console.log(`Could not make user in custom backend: ${err}`)
+        })
 }
 
-export const signup = (userInfo) => {
-    console.log(JSON.stringify(userInfo, null, 2))
+export const signup = (userInfo, navigation) => {
+    // Set auth listener for when user is signed in
+    auth().onAuthStateChanged(user => {
+        console.log('Attempting to add user to custom backend')
+
+        if (user)
+            customSignup(userInfo, user.uid, navigation)
+    })
 
     // Create Firebase User (Requires email, password)
     auth()
         .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
-        .then(() => {
-            console.log('Firebase account created')
-
-            // Get JWT token for new user
-            auth().currentUser.getIdToken()
-                .then(idToken => customSignup(userInfo, idToken))
-                .catch(error => console.log(`Not adding user to custom DB. Could not get JWT token: ${error}`))
-        })
+        .then(() => console.log('Firebase account created'))
         .catch(error => {
             console.log('Unable to make Firebase account')
 
