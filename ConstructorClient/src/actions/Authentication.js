@@ -23,18 +23,16 @@ const customSignup = (userInfo, uid, navigation) => {
 }
 
 export const signup = (userInfo, navigation) => {
-    // Set auth listener for when user is signed in
-    auth().onAuthStateChanged(user => {
-        console.log('Attempting to add user to custom backend')
-
-        if (user)
-            customSignup(userInfo, user.uid, navigation)
-    })
-
     // Create Firebase User (Requires email, password)
     auth()
         .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
-        .then(() => console.log('Firebase account created'))
+        .then((data) => {
+            console.log('Firebase account created')
+            console.log('Attempting to add user to custom backend')
+
+            if (data.user)
+                customSignup(userInfo, data.user.uid, navigation)
+        })
         .catch(error => {
             console.log('Unable to make Firebase account')
 
