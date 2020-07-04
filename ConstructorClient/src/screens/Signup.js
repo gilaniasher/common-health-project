@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
-import { TextField } from 'react-native-material-textfield';
-import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
-import auth from '@react-native-firebase/auth';
+import React, { useState, useEffect } from 'react'
+import { SafeAreaView, View, Text, StyleSheet, ScrollView } from 'react-native'
+import { TextField } from 'react-native-material-textfield'
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import { signup } from '../actions/Authentication'
 
 export default function Signup() {
+    const [signupDisabled, setSignupDisabled] = useState(true)
     const [state, setState] = useState({
         firstname: '',
         lastname: '',
         email: '',
-        password: ''
+        password: '',
+        address: '',
+        county: '',
+        phone: ''
     })
 
     const changeState = (id, val) => {
@@ -19,82 +23,96 @@ export default function Signup() {
         }))
     }
 
-    const signup = () => {
+    const initSignup = () => {
+        signup({
+            name: `${state.firstname} ${state.lastname}`,
+            email: state.email,
+            address: state.address,
+            county: state.county,
+            phone: state.phone,
+            password: state.password
+        })
+    }
+
+    useEffect(() => {
         let valid = true
 
         Object.entries(state).forEach(([key, value]) => {
-            if (value === '') {
+            if (value === '')
                 valid = false
-                console.log(`${key} is not defined`)
-            }
         })
 
-        if (valid) {
-            auth()
-                .createUserWithEmailAndPassword(state.email, state.password)
-                .then(() => {
-                    console.log('User account created & signed in!');
-                })
-                .catch(error => {
-                    if (error.code === 'auth/email-already-in-use') {
-                        console.log('That email address is already in use!');
-                    }
-
-                    if (error.code === 'auth/invalid-email') {
-                        console.log('That email address is invalid!');
-                    }
-
-                    console.error(error);
-                });
-
-            console.log(state.firstname)
-            console.log(state.lastname)
-            console.log(state.email)
-            console.log(state.password)
-        }
-    }
+        if (valid)
+            setSignupDisabled(false)
+        else
+            setSignupDisabled(true)
+    }, [state])
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.headerText}>Sign Up</Text>
 
-            <TextField
-                label='First Name'
-                textColor='#003366'
-                tintColor='#003366'
-                baseColor='#003366'
-                onChangeText={(msg) => changeState('firstname', msg)}
-            />
-            <TextField
-                label='Last Name'
-                textColor='#003366'
-                tintColor='#003366'
-                baseColor='#003366'
-                onChangeText={(msg) => changeState('lastname', msg)}
-            />
-            <TextField
-                label='Email'
-                textColor='#003366'
-                tintColor='#003366'
-                baseColor='#003366'
-                onChangeText={(msg) => changeState('email', msg)}
-            />
-            <TextField
-                label='Password'
-                textColor='#003366'
-                tintColor='#003366'
-                baseColor='#003366'
-                onChangeText={(msg) => changeState('password', msg)}
-                secureTextEntry={true}
-            />
+            <ScrollView>
+                <TextField
+                    label='First Name'
+                    textColor='#003366'
+                    tintColor='#003366'
+                    baseColor='#003366'
+                    onChangeText={(msg) => changeState('firstname', msg)}
+                />
+                <TextField
+                    label='Last Name'
+                    textColor='#003366'
+                    tintColor='#003366'
+                    baseColor='#003366'
+                    onChangeText={(msg) => changeState('lastname', msg)}
+                />
+                <TextField
+                    label='Address'
+                    textColor='#003366'
+                    tintColor='#003366'
+                    baseColor='#003366'
+                    onChangeText={(msg) => changeState('address', msg)}
+                />
+                <TextField
+                    label='County'
+                    textColor='#003366'
+                    tintColor='#003366'
+                    baseColor='#003366'
+                    onChangeText={(msg) => changeState('county', msg)}
+                />
+                <TextField
+                    label='Phone Number'
+                    textColor='#003366'
+                    tintColor='#003366'
+                    baseColor='#003366'
+                    onChangeText={(msg) => changeState('phone', msg)}
+                />
+                <TextField
+                    label='Email'
+                    textColor='#003366'
+                    tintColor='#003366'
+                    baseColor='#003366'
+                    onChangeText={(msg) => changeState('email', msg)}
+                />
+                <TextField
+                    label='Password'
+                    textColor='#003366'
+                    tintColor='#003366'
+                    baseColor='#003366'
+                    onChangeText={(msg) => changeState('password', msg)}
+                    secureTextEntry={true}
+                />
+            </ScrollView>
 
             <View style={styles.separator} />
 
             <AwesomeButtonRick
                 type='anchor'
-                onPress={signup}
+                onPress={initSignup}
                 borderRadius={20}
                 stretch={true}
+                disabled={signupDisabled}
             >
                 Sign Up
             </AwesomeButtonRick>
