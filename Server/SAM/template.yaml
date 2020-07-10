@@ -17,6 +17,18 @@ Resources:
           Properties:
             Path: /Signup
             Method: post
+  UserInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: user_info/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        UserInfo:
+          Type: Api
+          Properties:
+            Path: /UserInfo
+            Method: get
 Outputs:
   SignupApi:
     Description: API Gateway Signup for CHP
@@ -27,3 +39,12 @@ Outputs:
   SignupRequestIamRole:
     Description: Implicit IAM Role created for Signup Request function
     Value: SignupFunctionRole.Arn
+  UserInfoApi:
+    Description: API Gateway UserInfo for CHP
+    Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/UserInfo
+  UserInfoFunction:
+    Description: UserInfo Lambda Function ARN
+    Value: UserInfoFunction.Arn
+  UserInfoRequestIamRole:
+    Description: Implicit IAM Role created for UserInfo Request function
+    Value: UserInfoFunctionRole.Arn

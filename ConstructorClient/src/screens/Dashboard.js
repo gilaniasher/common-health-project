@@ -3,30 +3,29 @@ import { SafeAreaView, View, Text, StyleSheet, FlatList, TouchableOpacity } from
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
 import NotificationBubble from '../components/NotificationBubble';
 import logo from '../images/logo.png';
-
-// Temp default values
-const initialName = 'Asher';
-const initialRoundNumber = 3;
-const initialAssignedShields = 40;
-const initialOptedOut = false;
-const initialNotifications = [
-    { id: 1, text: 'Shields delivered' },
-    { id: 2, text: 'Driver has arrived' },
-    { id: 3, text: 'Cured cancer' },
-    { id: 4, text: 'Found world peace' },
-    { id: 5, text: 'Became the kung fu panda' },
-    { id: 6, text: 'Found nirvana' },
-]
+import { getDashboardInfo } from '../actions/UserInfo'
 
 export default function Dashboard(props) {
-    const [firstname, setFirstname] = useState(initialName);
-    const [roundNumber, setRoundNumber] = useState(initialRoundNumber);
-    const [assignedShields, setAssignedShields] = useState(initialAssignedShields);
-    const [optedOut, setOptedOut] = useState(initialOptedOut);
-    const [notifications, setNotifications] = useState(initialNotifications);
+    const [state, setState] = useState({
+        name: '',
+        roundNumber: 0,
+        assignedShields: 0,
+        builtShields: 0,
+        brokenShields: 0,
+        optedOut: true,
+        notifications: []
+    })
+
+    const changeState = (id, val) => {
+        setState(prevState => ({
+            ...prevState,
+            [id]: val
+        }))
+    }
 
     useEffect(() => {
-        // API call to load data and set all of the values
+        // API Call to load in all of the values
+        getDashboardInfo(props.route.params.uid, changeState)
     }, []);
 
     const renderNotification = ({ item }) => {
@@ -41,7 +40,7 @@ export default function Dashboard(props) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.welcomeContainer}>
-                <Text style={styles.bannerHeaderText}>Welcome {firstname}</Text>
+                <Text style={styles.bannerHeaderText}>Welcome {state.name}</Text>
             </View>
 
             <View style={styles.progressContainer}>
@@ -49,14 +48,14 @@ export default function Dashboard(props) {
 
                 <View style={styles.profileStatsContainer}>
                     <View style={styles.profileStats}>
-                        <Text style={styles.statsNumber}>{assignedShields / 10}</Text>
+                        <Text style={styles.statsNumber}>{state.assignedShields / 10}</Text>
                         <Text style={styles.statsText}>Kits</Text>
                     </View>
 
                     <View style={styles.verticalSeparator} />
 
                     <View style={styles.profileStats}>
-                        <Text style={styles.statsNumber}>{assignedShields}</Text>
+                        <Text style={styles.statsNumber}>{state.assignedShields}</Text>
                         <Text style={styles.statsText}>Shields</Text>
                     </View>
                 </View>
@@ -92,7 +91,7 @@ export default function Dashboard(props) {
                 <View />
 
                 <FlatList 
-                    data={notifications}
+                    data={state.notifications}
                     renderItem={renderNotification}
                     keyExtractor={(item) => item.id}
                     style={styles.notifications}

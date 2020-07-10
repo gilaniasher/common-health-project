@@ -30,7 +30,6 @@ const Tab = createMaterialBottomTabNavigator();
 export default function MyTabs() {
     return (
         <Tab.Navigator
-            initialRouteName="Dashboard"
             barStyle={{ backgroundColor: '#003366'}}
             screenOptions={routeIcons}
         >

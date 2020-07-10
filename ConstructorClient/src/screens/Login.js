@@ -45,7 +45,7 @@ export default function Login(props) {
                 })
         }
     }
-
+  
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged((user) => {
             setUser(user)
@@ -56,8 +56,15 @@ export default function Login(props) {
     }, [])
 
     useEffect(() => {
-        if (user)
-            props.navigation.navigate('TabNavigator')
+        if (user) {
+            props.navigation.navigate('TabNavigator', {
+                screen: 'Dashboard',
+                params: { 
+                    screen: 'Dashboard',
+                    params: { uid: user.uid }
+                }
+            })
+        }
     }, [user])
 
     return (
