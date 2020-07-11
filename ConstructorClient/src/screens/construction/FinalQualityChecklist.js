@@ -1,7 +1,41 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Modal, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicon from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import pic1 from '../../images/FinalQualityChecklist/temp1.jpg'
+import pic2 from '../../images/FinalQualityChecklist/temp2.jpg'
+import pic3 from '../../images/FinalQualityChecklist/temp3.jpg'
+import pic4 from '../../images/FinalQualityChecklist/temp4.jpg'
+import pic5 from '../../images/FinalQualityChecklist/temp5.jpg'
+
+const data = [
+    {
+        id: 1,
+        notification: 'The serial number is placed on the SAME SIDE as the NJIT logo and on the top left of the white band.',
+        image: pic1
+    },
+    {
+        id: 2,
+        notification: 'The Foam is placed on the bottom backside of the band and on the opposite side of the NJIT logo.',
+        image: pic2
+    },
+    {
+        id: 3,
+        notification: 'The PET shield is placed on the same side as the NJIT logo and on top of both halves of the band.',
+        image: pic3
+    },
+    {
+        id: 4,
+        notification: 'The black strap is weaved through on only one side 1\" of slack.',
+        image: pic4
+    },
+    {
+        id: 5,
+        notification: 'The tool is NOT returned in the bag.',
+        image: pic5
+    },
+]; 
 
 export default function FinalQualityChecklist(props) {
     const [modalVisible, setModalVisible] = useState(false);
@@ -11,7 +45,8 @@ export default function FinalQualityChecklist(props) {
         2: false,
         3: false,
         4: false,
-        5: false
+        5: false,
+        currentImage: null,
     })
 
     const changeState = (id, val) => {
@@ -21,96 +56,83 @@ export default function FinalQualityChecklist(props) {
         }))
     }
 
-    const data = [
-        {
-            id: 1,
-            notification: 'The serial number is placed on the SAME SIDE as the NJIT logo and on the top left of the white band.',
-            image: 'https://picsum.photos/50/50'
-        },
-        {
-            id: 2,
-            notification: 'The Foam is placed on the bottom backside of the band and on the opposite side of the NJIT logo.',
-            image: 'https://picsum.photos/51/50'
-        },
-        {
-            id: 3,
-            notification: 'The PET shield is placed on the same side as the NJIT logo and on top of both halves of the band.',
-            image: 'https://picsum.photos/52/50'
-        },
-        {
-            id: 4,
-            notification: 'The black strap is weaved through on only one side 1\" of slack.',
-            image: 'https://picsum.photos/53/50'
-        },
-        {
-            id: 5,
-            notification: 'The tool is NOT returned in the bag.',
-            image: 'https://picsum.photos/54/50'
-        },
-    ]; 
-
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.titleContainer}>
-                <TouchableOpacity onPress={() => props.navigation.goBack()} style={styles.backButton}>
-                    <Icon name='ios-arrow-back' size={28} color='white'/>
-                </TouchableOpacity>
-                <Text style={styles.titleText}>Final Quality Checklist</Text>
-            </View>
+        <>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}> 
 
-            <View style={styles.notificationList}>
-                <FlatList
-                    data={data}
-                    renderItem={({ item }) =>
-                    
-                        <View style={styles.dataRow}>
-                            <Modal
-                                animationType="fade"
-                                transparent={true}
-                                visible={modalVisible}> 
+                    <View style={styles.centeredView}>
+                        <Image source={state.currentImage} style={styles.image}/>
+                        
+                        <TouchableOpacity
+                            onPress={() => setModalVisible(!modalVisible)}>
+                            <Text style={styles.closeImage}>Close Image</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                                    <View style={styles.centeredView}>
-                                        <Image source={{uri: item.image}} style={styles.image}/>
+            </Modal>
+
+            <SafeAreaView style={styles.container}>
+                <View style={styles.titleContainer}>
+                    <TouchableOpacity onPress={() => props.navigation.goBack()} style={styles.backButton}>
+                        <Ionicon name='ios-arrow-back' size={28} color='white'/>
+                    </TouchableOpacity>
+                    <Text style={styles.titleText}>Final Quality Checklist</Text>
+                </View>
+
+                <View style={styles.notificationList}>
+                    <FlatList
+                        data={data}
+                        renderItem={({ item }) =>
+                        
+                            <View style={[styles.dataRow, {backgroundColor: item.id % 2 === 1 ? 'lightgray' : 'white'}]}>
+                                
+                                {!state[item.id] && <TouchableOpacity 
+                                    style= {[styles.checkBox, {backgroundColor: state[item.id] ? 'darkgreen' : 'white'}]}
+                                    style={styles.checkBox}
+                                    onPress= {() => changeState(item.id, !state[item.id])}>
                                         
-                                        <TouchableOpacity
-                                            onPress={() => setModalVisible(!modalVisible)}>
-                                            <Text style={styles.closeImage}>Close Image</Text>
+                                </TouchableOpacity>}
+
+                                {state[item.id] && 
+                                        <TouchableOpacity onPress={() => changeState(item.id, !state[item.id])}>
+                                            <Ionicon size={50} style={{margin:20}} color='green' name='ios-checkmark'/>
                                         </TouchableOpacity>
-                                    </View>
+                                }
 
-                            </Modal>
-                            <TouchableOpacity 
-                                style= {[styles.checkBox, {backgroundColor: state[item.id] ? 'black' : 'white'}]}
-                                onPress= {() => changeState(item.id, !state[item.id])}>
-                            </TouchableOpacity>
+                                <Text style={styles.notification}>{item.notification}</Text>
 
-                            <Text style={styles.notification}>{item.notification}</Text>
+                                <TouchableOpacity 
+                                    style={styles.infoButton}
+                                    onPress={() => {
+                                        changeState('currentImage', item.image)
+                                        setModalVisible(true)
+                                    }}>
+                                    <MaterialIcons name='info-outline' size={25} color='black'/>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity 
-                                style={styles.infoButton}
-                                onPress={() => setModalVisible(true)}>
-                                <Icon name='help-circle-outline' size={20}/>
-                            </TouchableOpacity>
+                            </View>
 
-                        </View>
+                        }
+                        keyExtractor={item => item.id}
+                    />
 
+                    {(state[1] && state[2] && state[3] && state[4] && state[5]) &&  
+                        <AwesomeButtonRick 
+                        type='anchor'
+                        borderRadius={20}
+                        stretch={true}
+                        style={styles.submitButton}
+                        >
+                            Submit
+                        </AwesomeButtonRick> 
                     }
-                    keyExtractor={item => item.id}
-                />
-            </View>
+                </View>
 
-            {state[1] && state[2] && state[3] && state[4] && state[5] && 
-                <AwesomeButtonRick 
-                type='anchor'
-                borderRadius={20}
-                stretch={true}
-                style={styles.submitButton}
-                >
-                    Submit
-                </AwesomeButtonRick>
-            }
-
-        </SafeAreaView>
+            </SafeAreaView>
+        </>
     );
 }
 
@@ -141,17 +163,17 @@ const styles = StyleSheet.create({
         flex: 6,
     },
     checkBox: {
-        width: '6%',
-        height: '30%',
+        width: '4%',
+        height: '20%',
         borderColor: 'black',
         borderWidth: 1,
         margin: '5%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     dataRow: {
         flexDirection: 'row',
         height: 80,
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
         alignItems: 'center',
     },
     notification: {
@@ -161,11 +183,12 @@ const styles = StyleSheet.create({
     },
     infoButton: {
         margin: '5%',
+        width: '26%'
     },
     submitButton: {
         width: '70%',
         alignSelf: 'center',
-        marginBottom: '10%'
+        marginBottom: '8%'
     },
     centeredView: {
         flex: 1,
@@ -179,5 +202,5 @@ const styles = StyleSheet.create({
     },
     closeImage: {
         color: 'white'
-    }
+    },
 });
