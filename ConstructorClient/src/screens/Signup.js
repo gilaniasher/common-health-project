@@ -3,6 +3,7 @@ import { SafeAreaView, View, Text, StyleSheet, ScrollView } from 'react-native'
 import { TextField } from 'react-native-material-textfield'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import { signup } from '../actions/Authentication'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function Signup(props) {
     const [signupDisabled, setSignupDisabled] = useState(true)
@@ -13,7 +14,8 @@ export default function Signup(props) {
         password: '',
         address: '',
         county: '',
-        phone: ''
+        phone: '',
+        spinner: false
     })
 
     const changeState = (id, val) => {
@@ -31,7 +33,7 @@ export default function Signup(props) {
             county: state.county,
             phone: state.phone,
             password: state.password
-        }, props.navigation)
+        }, props.navigation, changeState)
     }
 
     useEffect(() => {
@@ -42,14 +44,22 @@ export default function Signup(props) {
                 valid = false
         })
 
-        if (valid)
+        if (valid) {
             setSignupDisabled(false)
-        else
+        }
+
+        else {
             setSignupDisabled(true)
+        }
     }, [state])
 
     return (
         <SafeAreaView style={styles.container}>
+            <Spinner
+                visible={state.spinner}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+            />
             <Text style={styles.headerText}>Sign Up</Text>
 
             <ScrollView>
@@ -121,6 +131,9 @@ export default function Signup(props) {
 }
 
 const styles = StyleSheet.create({
+    spinnerTextStyle: {
+        color: '#FFF'
+    },
     container: {
         padding: '10%',
         flex: 1,

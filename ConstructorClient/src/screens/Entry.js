@@ -10,6 +10,9 @@ const { width, height } = Dimensions.get('window')
 export default function Entry(props) {
     const [initializing, setInitializing] = useState(true)
     const [user, setUser] = useState()
+    // ({
+    //     spinner: false
+    // })
 
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged((user) => {
@@ -22,7 +25,9 @@ export default function Entry(props) {
 
     useEffect(() => {
         if (user) {
+            // changeState('spinner', true)
             getDashboardInfo(user.uid).then((data) => {
+                // changeState('spinner', false)
                 props.navigation.navigate('TabNavigator', {
                     screen: 'Dashboard',
                     params: { 
@@ -36,6 +41,11 @@ export default function Entry(props) {
 
     return (
         <SafeAreaView style={styles.container}>
+            {/* <Spinner
+                visible={state.spinner}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+            /> */}
             <Image source={logo} style={styles.logo}/>
 
             <View style={styles.separator} />
@@ -64,6 +74,9 @@ export default function Entry(props) {
 }
 
 const styles = StyleSheet.create({
+    spinnerTextStyle: {
+        color: '#FFF'
+    },
     container: {
         flex: 1,
         justifyContent: 'center',

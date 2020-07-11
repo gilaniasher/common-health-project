@@ -12,13 +12,14 @@ const customSignup = (userInfo, uid, navigation) => {
         phone_number: userInfo.phone,
         email: userInfo.email
     })
-
+    changeState('spinner', true)
     // Create user in our own custom RDS database
     fetch(url, { method: 'POST' })
         .then(() => {
             console.log('User created in custom backend')
 
             getDashboardInfo(uid).then((data) => {
+                changeState('spinner', false)
                 navigation.navigate('TabNavigator', {
                     screen: 'Dashboard',
                     params: { 

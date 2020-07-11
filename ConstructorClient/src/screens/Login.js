@@ -4,13 +4,15 @@ import { TextField } from 'react-native-material-textfield'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import auth from '@react-native-firebase/auth'
 import { getDashboardInfo } from '../actions/UserInfo'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function Login(props) {
     const [initializing, setInitializing] = useState(true)
     const [user, setUser] = useState()
     const [state, setState] = useState({
         email: '',
-        password: ''
+        password: '',
+        spinner: false
     })
 
     const changeState = (id, val) => {
@@ -19,9 +21,10 @@ export default function Login(props) {
             [id]: val
         }))
     }
-
+    
     const login = () => {
         let valid = true
+        changeState('spinner', true)
 
         Object.entries(state).forEach(([key, value]) => {
             if (value === '') {
@@ -46,7 +49,7 @@ export default function Login(props) {
                 })
         }
     }
-  
+
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged((user) => {
             setUser(user)
@@ -59,9 +62,10 @@ export default function Login(props) {
     useEffect(() => {
         if (user) {
             getDashboardInfo(user.uid).then((data) => {
+                changeState('spinner', false)
                 props.navigation.navigate('TabNavigator', {
                     screen: 'Dashboard',
-                    params: { 
+                    params: {
                         screen: 'Dashboard',
                         params: { uid: user.uid, userInfo: data }
                     }
@@ -72,16 +76,21 @@ export default function Login(props) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Spinner
+                visible={state.spinner}
+                textContent={'Loading...'}
+                textStyle={styles.spinnerTextStyle}
+            />
             <Text style={styles.headerText}>Login</Text>
 
-            <TextField 
+            <TextField
                 label='Email'
                 textColor='#003366'
                 tintColor='#003366'
                 baseColor='#003366'
                 onChangeText={(msg) => changeState('email', msg)}
             />
-            <TextField 
+            <TextField
                 label='Password'
                 textColor='#003366'
                 tintColor='#003366'
@@ -92,7 +101,7 @@ export default function Login(props) {
 
             <View style={styles.separator} />
 
-            <AwesomeButtonRick 
+            <AwesomeButtonRick
                 type='anchor'
                 onPress={login}
                 borderRadius={20}
@@ -109,6 +118,9 @@ export default function Login(props) {
 }
 
 const styles = StyleSheet.create({
+    spinnerTextStyle: {
+        color: '#FFF'
+    },
     container: {
         padding: '10%',
         flex: 1,
