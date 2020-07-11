@@ -1,14 +1,42 @@
-import React from 'react';
-import { SafeAreaView, View, StyleSheet, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView, View, StyleSheet, Dimensions, Image } from 'react-native'
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import auth from '@react-native-firebase/auth'
+import { getDashboardInfo } from '../actions/UserInfo'
+import logo from '../images/logo.png'
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window')
 
 export default function Entry(props) {
+    const [initializing, setInitializing] = useState(true)
+    const [user, setUser] = useState()
+
+    useEffect(() => {
+        const subscriber = auth().onAuthStateChanged((user) => {
+            setUser(user)
+            if (initializing) setInitializing(false)
+        })
+
+        return subscriber
+    }, [])
+
+    useEffect(() => {
+        if (user) {
+            getDashboardInfo(user.uid).then((data) => {
+                props.navigation.navigate('TabNavigator', {
+                    screen: 'Dashboard',
+                    params: { 
+                        screen: 'Dashboard',
+                        params: { uid: user.uid, userInfo: data }
+                    }
+                })
+            })
+        }
+    }, [user])
+
     return (
         <SafeAreaView style={styles.container}>
-            <Icon name='shield-cross' size={Math.min(width, height) / 1.5} color='#003366' />
+            <Image source={logo} style={styles.logo}/>
 
             <View style={styles.separator} />
 
@@ -44,5 +72,9 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 30
+    },
+    logo: {
+        width: Math.min(width, height) / 1.5,
+        height: Math.min(width, height) / 1.5
     }
 });

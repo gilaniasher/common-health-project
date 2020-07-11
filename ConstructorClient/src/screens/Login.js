@@ -3,10 +3,11 @@ import { SafeAreaView, View, Text, StyleSheet, ActivityIndicator } from 'react-n
 import { TextField } from 'react-native-material-textfield'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import auth from '@react-native-firebase/auth'
+import { getDashboardInfo } from '../actions/UserInfo'
 
 export default function Login(props) {
     const [initializing, setInitializing] = useState(true)
-    const[user, setUser] = useState()
+    const [user, setUser] = useState()
     const [state, setState] = useState({
         email: '',
         password: ''
@@ -57,12 +58,14 @@ export default function Login(props) {
 
     useEffect(() => {
         if (user) {
-            props.navigation.navigate('TabNavigator', {
-                screen: 'Dashboard',
-                params: { 
+            getDashboardInfo(user.uid).then((data) => {
+                props.navigation.navigate('TabNavigator', {
                     screen: 'Dashboard',
-                    params: { uid: user.uid }
-                }
+                    params: { 
+                        screen: 'Dashboard',
+                        params: { uid: user.uid, userInfo: data }
+                    }
+                })
             })
         }
     }, [user])

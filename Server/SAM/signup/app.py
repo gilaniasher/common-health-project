@@ -13,11 +13,15 @@ def get_db_secret():
     else:
         return 200, json.loads(secret)
 
-def run_query(query, vals):
+def lambda_handler(event, context):
+    # Load params
+    params = event['queryStringParameters']
+
+    # Connect to DB
     status, secret = get_db_secret()
 
     if status == 500:
-        return status, secret
+        return { 'statusCode': 500, 'body': json.dumps({ 'message': 'Unable to get DB secret' }) }
 
     conn = None
     cur = None
@@ -25,28 +29,8 @@ def run_query(query, vals):
     try:
         conn = psycopg2.connect(host=secret['host'], database=secret['dbname'], user=secret['username'], password=secret['password'])
         cur = conn.cursor()
-        cur.execute(query, vals)
-        conn.commit()
     except Exception as e:
-        status = 500
-        msg = str(e)
-    else:
-        status = 200
-        msg = 'Signup succesful'
-    finally:
-        if cur is not None: cur.close()
-        if conn is not None: conn.close()
-
-    return status, msg
-
-def lambda_handler(event, context):
-    query = '''
-    INSERT INTO constructors (id, name, address, county, phone_number, email, driver_id)
-    VALUES (%s, %s, %s, %s, %s, %s, %s)
-    '''
-
-    print(event)
-    params = event['queryStringParameters']
+        return { 'statusCode': 500, 'body': json.dumps({ 'message': f'Failed to establish DB connection: {e}' }) }
 
     vals = (
         params['uid'],
@@ -58,11 +42,20 @@ def lambda_handler(event, context):
         1
     )
 
-    status, msg = run_query(query, vals)
+    cur.execute('''
+        INSERT INTO constructors (id, name, address, county, phone_number, email, driver_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+    ''', vals)
+
+    conn.commit()
+
+    if conn is not None:
+        cur.close()
+        conn.close()
 
     return {
-        'statusCode': status,
+        'statusCode': 200,
         'body': json.dumps({
-            'message': msg
+            'message': 'User inserted succesfully'
         }),
     }

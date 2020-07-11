@@ -1,9 +1,11 @@
 import auth from '@react-native-firebase/auth'
+import { getDashboardInfo } from '../actions/UserInfo'
+
 const endpoint = 'http://10.0.2.2:3000'
 
 const customSignup = (userInfo, uid, navigation) => {
     const url = `${endpoint}/Signup?` + new URLSearchParams({
-        uid: uid,
+        uid,
         name: userInfo.name,
         address: userInfo.address,
         county: userInfo.county,
@@ -15,7 +17,16 @@ const customSignup = (userInfo, uid, navigation) => {
     fetch(url, { method: 'POST' })
         .then(() => {
             console.log('User created in custom backend')
-            navigation.navigate('TabNavigator')
+
+            getDashboardInfo(uid).then((data) => {
+                navigation.navigate('TabNavigator', {
+                    screen: 'Dashboard',
+                    params: { 
+                        screen: 'Dashboard',
+                        params: { uid, userInfo: data }
+                    }
+                })
+            })
         })
         .catch(err => {
             console.log(`Could not make user in custom backend: ${err}`)

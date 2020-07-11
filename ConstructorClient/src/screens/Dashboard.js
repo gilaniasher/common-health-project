@@ -3,7 +3,6 @@ import { SafeAreaView, View, Text, StyleSheet, FlatList, TouchableOpacity } from
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
 import NotificationBubble from '../components/NotificationBubble';
 import logo from '../images/logo.png';
-import { getDashboardInfo } from '../actions/UserInfo'
 
 export default function Dashboard(props) {
     const [state, setState] = useState({
@@ -24,8 +23,16 @@ export default function Dashboard(props) {
     }
 
     useEffect(() => {
-        // API Call to load in all of the values
-        getDashboardInfo(props.route.params.uid, changeState)
+        console.log('Dashboard', JSON.stringify(props.route.params.userInfo, null, 2))
+        const data = props.route.params.userInfo
+
+        changeState('name', data.name)
+        changeState('roundNumber', data.current_round)
+        changeState('assignedShields', data.num_masks_assigned)
+        changeState('builtShields', data.num_masks_assigned)
+        changeState('brokenShields', data.num_masks_assigned)
+        changeState('optedOut', false)
+        changeState('notifications', data.notifications)
     }, []);
 
     const renderNotification = ({ item }) => {
