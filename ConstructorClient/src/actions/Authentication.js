@@ -3,7 +3,7 @@ import { getDashboardInfo } from '../actions/UserInfo'
 
 const endpoint = 'http://10.0.2.2:3000'
 
-const customSignup = (userInfo, uid, navigation) => {
+const customSignup = (userInfo, uid, navigation, changeState) => {
     const url = `${endpoint}/Signup?` + new URLSearchParams({
         uid,
         name: userInfo.name,
@@ -12,7 +12,7 @@ const customSignup = (userInfo, uid, navigation) => {
         phone_number: userInfo.phone,
         email: userInfo.email
     })
-    changeState('spinner', true)
+
     // Create user in our own custom RDS database
     fetch(url, { method: 'POST' })
         .then(() => {
@@ -34,7 +34,9 @@ const customSignup = (userInfo, uid, navigation) => {
         })
 }
 
-export const signup = (userInfo, navigation) => {
+export const signup = (userInfo, navigation, changeState) => {
+    changeState('spinner', true)
+
     // Create Firebase User (Requires email, password)
     auth()
         .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
@@ -43,7 +45,7 @@ export const signup = (userInfo, navigation) => {
             console.log('Attempting to add user to custom backend')
 
             if (data.user)
-                customSignup(userInfo, data.user.uid, navigation)
+                customSignup(userInfo, data.user.uid, navigation, changeState)
         })
         .catch(error => {
             console.log('Unable to make Firebase account')

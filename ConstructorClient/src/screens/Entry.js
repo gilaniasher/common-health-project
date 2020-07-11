@@ -4,15 +4,24 @@ import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blu
 import auth from '@react-native-firebase/auth'
 import { getDashboardInfo } from '../actions/UserInfo'
 import logo from '../images/logo.png'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 const { width, height } = Dimensions.get('window')
 
 export default function Entry(props) {
     const [initializing, setInitializing] = useState(true)
     const [user, setUser] = useState()
-    // ({
-    //     spinner: false
-    // })
+
+    const [state, setState] = useState({
+        spinner: false
+    })
+
+    const changeState = (id, val) => {
+        setState(prevState => ({
+            ...prevState,
+            [id]: val
+        }))
+    }
 
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged((user) => {
@@ -25,9 +34,9 @@ export default function Entry(props) {
 
     useEffect(() => {
         if (user) {
-            // changeState('spinner', true)
+            changeState('spinner', true)
             getDashboardInfo(user.uid).then((data) => {
-                // changeState('spinner', false)
+                changeState('spinner', false)
                 props.navigation.navigate('TabNavigator', {
                     screen: 'Dashboard',
                     params: { 
@@ -41,11 +50,11 @@ export default function Entry(props) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* <Spinner
+            <Spinner
                 visible={state.spinner}
                 textContent={'Loading...'}
                 textStyle={styles.spinnerTextStyle}
-            /> */}
+            />
             <Image source={logo} style={styles.logo}/>
 
             <View style={styles.separator} />
