@@ -27,11 +27,11 @@ export default function Dashboard(props) {
         const data = props.route.params.userInfo
 
         changeState('name', data.name)
-        changeState('roundNumber', data.current_round)
-        changeState('assignedShields', data.num_masks_assigned)
-        changeState('builtShields', data.num_masks_assigned)
-        changeState('brokenShields', data.num_masks_assigned)
-        changeState('optedOut', false)
+        changeState('roundNumber', data.currentRound)
+        changeState('optedOut', data.optedOut)
+        changeState('assignedShields', data.numMasksAssigned)
+        changeState('builtShields', data.numMasksBuilt)
+        changeState('brokenShields', data.numMasksBroken)
         changeState('notifications', data.notifications)
     }, []);
 

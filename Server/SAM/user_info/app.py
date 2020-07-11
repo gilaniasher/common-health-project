@@ -49,7 +49,12 @@ def lambda_handler(event, context):
         WHERE c_id = %s AND round_number = %s
     ''', (uid, round_number))
 
-    num_masks_built, num_masks_broken, num_masks_assigned = cur.fetchone()
+    if (vals := cur.fetchone()) is None:
+        opted_out = True
+        num_masks_built, num_masks_broken, num_masks_assigned = (0, 0, 0)
+    else:
+        opted_out = False
+        num_masks_built, num_masks_broken, num_masks_assigned = vals
 
     # Query for name
     cur.execute('''
@@ -69,10 +74,11 @@ def lambda_handler(event, context):
         'statusCode': status,
         'body': json.dumps({
             'name': name,
-            'current_round': round_number,
-            'num_masks_built': num_masks_built,
-            'num_masks_broken': num_masks_broken,
-            'num_masks_assigned': num_masks_assigned,
+            'currentRound': round_number,
+            'optedOut' : opted_out,
+            'numMasksAssigned': num_masks_assigned,
+            'numMasksBuilt': num_masks_built,
+            'numMasksBroken': num_masks_broken,
             'notifications': notifications
         }),
     }
