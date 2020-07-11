@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, Modal } from 'react-native'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 
 export default function OptModal(props) {
+
     return (
         <Modal
             animationType='fade'

@@ -3,6 +3,7 @@ import { SafeAreaView, View, Text, StyleSheet, FlatList, TouchableOpacity } from
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
 import NotificationBubble from '../components/NotificationBubble';
 import logo from '../images/logo.png';
+import OptModal from '../components/OptModal';
 
 export default function Dashboard(props) {
     const [state, setState] = useState({
@@ -45,70 +46,87 @@ export default function Dashboard(props) {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.welcomeContainer}>
-                <Text style={styles.bannerHeaderText}>Welcome {state.name}</Text>
-            </View>
-
-            <View style={styles.progressContainer}>
-                <Text style={styles.headerText}>Shields Assigned This Round</Text>
-
-                <View style={styles.profileStatsContainer}>
-                    <View style={styles.profileStats}>
-                        <Text style={styles.statsNumber}>{state.assignedShields / 10}</Text>
-                        <Text style={styles.statsText}>Kits</Text>
-                    </View>
-
-                    <View style={styles.verticalSeparator} />
-
-                    <View style={styles.profileStats}>
-                        <Text style={styles.statsNumber}>{state.assignedShields}</Text>
-                        <Text style={styles.statsText}>Shields</Text>
-                    </View>
+        <>
+            <OptModal visible={true} />
+            <SafeAreaView style={styles.container}>
+                <View style={styles.welcomeContainer}>
+                    <Text style={styles.bannerHeaderText}>Welcome {state.name}</Text>
                 </View>
 
-                <TouchableOpacity 
-                    style={styles.timelineContainer} 
-                    onPress={() => props.navigation.navigate('Timeline')}
-                >
-                    <Text style={styles.timelineLeft}>Timeline Status</Text>
-                    <Text style={styles.timelineRight}>{'>'}</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={styles.progressContainer}>
+                    <Text style={styles.headerText}>Shields Assigned This Round</Text>
 
-            <View style={styles.bottomContainer}>
-                <AwesomeButtonRick 
-                    type='anchor'
-                    onPress={() => props.navigation.navigate('Construction')}
-                    borderRadius={15}
-                    stretch={true}
-                    backgroundColor={'#003366'}
-                    backgroundDarker={'#003366'}
-                >
-                    Construct Shields
-                </AwesomeButtonRick>
+                    <View style={styles.profileStatsContainer}>
+                        <View style={styles.profileStats}>
+                            <Text style={styles.statsNumber}>{state.assignedShields / 10}</Text>
+                            <Text style={styles.statsText}>Kits</Text>
+                        </View>
 
-                <View style={styles.verticalSpacer} />
+                        <View style={styles.verticalSeparator} />
 
-                <TouchableOpacity style={styles.notificationsHeader} onPress={() => props.navigation.navigate('Notifications')}>
-                    <Text style={[styles.normalText, {flex: 1}]}>Most Recent Notifications</Text>
-                    <Text style={[styles.normalText, {justifyContent: 'flex-end'}]}>{'>'}</Text>
-                </TouchableOpacity>
+                        <View style={styles.profileStats}>
+                            <Text style={styles.statsNumber}>{state.assignedShields}</Text>
+                            <Text style={styles.statsText}>Shields</Text>
+                        </View>
+                    </View>
 
-                <View />
+                    <TouchableOpacity 
+                        style={styles.timelineContainer} 
+                        onPress={() => props.navigation.navigate('Timeline')}
+                    >
+                        <Text style={styles.timelineLeft}>Timeline Status</Text>
+                        <Text style={styles.timelineRight}>{'>'}</Text>
+                    </TouchableOpacity>
+                </View>
 
-                <FlatList 
-                    data={state.notifications}
-                    renderItem={renderNotification}
-                    keyExtractor={(item) => item.id}
-                    style={styles.notifications}
-                />
-            </View>
-        </SafeAreaView>
+                <View style={styles.bottomContainer}>
+                    <AwesomeButtonRick 
+                        type='anchor'
+                        onPress={() => props.navigation.navigate('Construction')}
+                        borderRadius={15}
+                        stretch={true}
+                        backgroundColor={'#003366'}
+                        backgroundDarker={'#003366'}
+                    >
+                        Construct Shields
+                    </AwesomeButtonRick>
+
+                    <View style={styles.verticalSpacer} />
+
+                    <TouchableOpacity style={styles.notificationsHeader} onPress={() => props.navigation.navigate('Notifications')}>
+                        <Text style={[styles.normalText, {flex: 1}]}>Most Recent Notifications</Text>
+                        <Text style={[styles.normalText, {justifyContent: 'flex-end'}]}>{'>'}</Text>
+                    </TouchableOpacity>
+
+                    <View />
+
+                    <FlatList 
+                        data={state.notifications}
+                        renderItem={renderNotification}
+                        keyExtractor={(item) => item.id}
+                        style={styles.notifications}
+                    />
+                </View>
+            </SafeAreaView>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(46, 49, 49, .98)',
+        paddingHorizontal: '5%'
+    },
+    modalHeader: {
+        color: 'white',
+        fontSize: 30,
+        textAlign: 'center',
+        paddingBottom: '20%',
+        fontWeight: 'bold'
+    },
     container: {
         flex: 1,
     },
