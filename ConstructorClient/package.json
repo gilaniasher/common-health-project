@@ -19,6 +19,7 @@
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-app-intro-slider": "^4.0.4",
+    "react-native-dropdownalert": "^4.2.1",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-loading-spinner-overlay": "^1.1.0",
     "react-native-material-textfield": "git+https://github.com/javarahulsharma/react-native-material-textfield.git",

@@ -5,6 +5,7 @@ import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blu
 import auth from '@react-native-firebase/auth'
 import { getDashboardInfo } from '../actions/UserInfo'
 import Spinner from 'react-native-loading-spinner-overlay';
+import DropdownAlert from 'react-native-dropdownalert';
 
 export default function Login(props) {
     const [initializing, setInitializing] = useState(true)
@@ -12,7 +13,9 @@ export default function Login(props) {
     const [state, setState] = useState({
         email: '',
         password: '',
-        spinner: false
+        spinner: false,
+        invalidRef: React.createRef(),
+        firebaseError: false
     })
 
     const changeState = (id, val) => {
@@ -21,7 +24,7 @@ export default function Login(props) {
             [id]: val
         }))
     }
-    
+
     const login = () => {
         let valid = true
         changeState('spinner', true)
@@ -37,15 +40,17 @@ export default function Login(props) {
             auth()
                 .signInWithEmailAndPassword(state.email, state.password)
                 .catch(error => {
+                    changeState('spinner', false);
                     if (error.code === 'auth/invalid-email') {
-                        console.log('Invalid email')
+                        changeState('firebaseError', 'Invalid Credentials')
                     } else if (error.code === 'auth/user-disabled') {
-                        console.log('User disabled')
+                        changeState('firebaseError', 'Account has been disabled, contact an admin')
                     } else if (error.code === 'auth/user-not-found') {
-                        console.log('User not found')
+                        changeState('firebaseError', 'Invalid Credentials')
                     } else if (error.code === 'auth/wrong-password') {
-                        console.log('Wrong password')
+                        changeState('firebaseError', 'Invalid Credentials')
                     }
+
                 })
         }
     }
@@ -70,12 +75,24 @@ export default function Login(props) {
                         params: { uid: user.uid, userInfo: data }
                     }
                 })
+            }).catch(error => {
+                changeState('spinner', false)
             })
         }
     }, [user])
 
+    useEffect(() => {
+        if(state.firebaseError) {
+            state.invalidRef.alertWithType('error', state.firebaseError);
+            changeState('firebaseError', false);
+        }
+    }, [state.firebaseError])
+
     return (
         <SafeAreaView style={styles.container}>
+            <View>
+                <DropdownAlert ref={ref => state.invalidRef = ref} />
+            </View>
             <Spinner
                 visible={state.spinner}
                 textContent={'Loading...'}
