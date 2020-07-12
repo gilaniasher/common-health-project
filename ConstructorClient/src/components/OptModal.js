@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, Modal, Dimensions, TouchableOpacity } from 'react-native'
 import NumericInput from 'react-native-numeric-input'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import { kitSignup } from '../actions/KitSignup'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -19,8 +20,8 @@ export default function OptModal(props) {
         }))
     }
 
-    const signupForKits = () => {
-        console.log('Submit kit signup')
+    const initKitSignup = () => {
+        kitSignup(props.uid, state.numKits)
     }
 
     return (
@@ -53,7 +54,7 @@ export default function OptModal(props) {
                             {state.numKits != 0 &&
                                 <AwesomeButtonRick
                                     type='anchor'
-                                    onPress={signupForKits}
+                                    onPress={initKitSignup}
                                     borderRadius={15}
                                     stretch={true}
                                     backgroundColor={'#003366'}

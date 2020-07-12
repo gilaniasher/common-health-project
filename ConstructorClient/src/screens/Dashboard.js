@@ -47,7 +47,7 @@ export default function Dashboard(props) {
 
     return (
         <>
-            <OptModal visible={true} />
+            <OptModal visible={state.optedOut} uid={props.route.params.uid} />
             <SafeAreaView style={styles.container}>
                 <View style={styles.welcomeContainer}>
                     <Text style={styles.bannerHeaderText}>Welcome {state.name}</Text>

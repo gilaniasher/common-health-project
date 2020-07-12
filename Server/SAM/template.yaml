@@ -29,6 +29,18 @@ Resources:
           Properties:
             Path: /UserInfo
             Method: get
+  KitSignupFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: kit_signup/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        KitSignup:
+          Type: Api
+          Properties:
+            Path: /KitSignup
+            Method: post
 Outputs:
   SignupApi:
     Description: API Gateway Signup for CHP
@@ -48,3 +60,12 @@ Outputs:
   UserInfoRequestIamRole:
     Description: Implicit IAM Role created for UserInfo Request function
     Value: UserInfoFunctionRole.Arn
+  KitSignupApi:
+    Description: API Gateway KitSignup for CHP
+    Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/KitSignup
+  KitSignupFunction:
+    Description: KitSignup Lambda Function ARN
+    Value: KitSignupFunction.Arn
+  KitSignupRequestIamRole:
+    Description: Implicit IAM Role created for KitSignup Request function
+    Value: KitSignupFunctionRole.Arn
