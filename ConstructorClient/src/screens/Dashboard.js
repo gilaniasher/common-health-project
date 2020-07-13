@@ -7,13 +7,14 @@ import OptModal from '../components/OptModal';
 
 export default function Dashboard(props) {
     const [state, setState] = useState({
+        data: {},
         name: '',
         roundNumber: 0,
         assignedShields: 0,
         builtShields: 0,
         brokenShields: 0,
         optedOut: true,
-        notifications: []
+        notifications: []        
     })
 
     const changeState = (id, val) => {
@@ -24,17 +25,20 @@ export default function Dashboard(props) {
     }
 
     useEffect(() => {
-        console.log('Dashboard', JSON.stringify(props.route.params.userInfo, null, 2))
-        const data = props.route.params.userInfo
+        console.log('Dashboard', JSON.stringify(state.data, null, 2))
 
-        changeState('name', data.name)
-        changeState('roundNumber', data.currentRound)
-        changeState('optedOut', data.optedOut)
-        changeState('assignedShields', data.numMasksAssigned)
-        changeState('builtShields', data.numMasksBuilt)
-        changeState('brokenShields', data.numMasksBroken)
-        changeState('notifications', data.notifications)
-    }, []);
+        changeState('name', state.data.name)
+        changeState('roundNumber', state.data.currentRound)
+        changeState('optedOut', state.data.optedOut)
+        changeState('assignedShields', state.data.numMasksAssigned)
+        changeState('builtShields', state.data.numMasksBuilt)
+        changeState('brokenShields', state.data.numMasksBroken)
+        changeState('notifications', state.data.notifications)
+    }, [state.data]);
+
+    useEffect(() => {
+        changeState('data', props.route.params.userInfo)
+    }, [])
 
     const renderNotification = ({ item }) => {
         return (
@@ -47,7 +51,12 @@ export default function Dashboard(props) {
 
     return (
         <>
-            <OptModal visible={state.optedOut} uid={props.route.params.uid} />
+            <OptModal
+                visible={state.optedOut}
+                uid={props.route.params.uid}
+                changeDashboardState={changeState} 
+                navigation={props.navigation}
+            />
             <SafeAreaView style={styles.container}>
                 <View style={styles.welcomeContainer}>
                     <Text style={styles.bannerHeaderText}>Welcome {state.name}</Text>

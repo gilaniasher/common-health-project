@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, Modal, Dimensions, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, Modal, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native'
 import NumericInput from 'react-native-numeric-input'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import { kitSignup } from '../actions/KitSignup'
+import DropdownAlert from 'react-native-dropdownalert'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import auth from '@react-native-firebase/auth'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -10,7 +13,10 @@ const height = Dimensions.get('window').height
 export default function OptModal(props) {
     const [formVisible, setFormVisible] = useState(false)
     const [state, setState] = useState({
-        numKits: 0
+        numKits: 0,
+        spinner: false,
+        invalidRef: React.createRef(),
+        signupError: ''
     })
 
     const changeState = (id, val) => {
@@ -21,8 +27,25 @@ export default function OptModal(props) {
     }
 
     const initKitSignup = () => {
-        kitSignup(props.uid, state.numKits)
+        changeState('spinner', true)
+        kitSignup(props.uid, state.numKits, changeState, props.changeDashboardState)
     }
+
+    const signout = () => {
+        auth()
+            .signOut()
+            .then(() => {
+                console.log('User signed out')
+                props.navigation.navigate('Login')
+            })
+    }
+
+    useEffect(() => {
+        if (state.signupError !== '') {
+            state.invalidRef.alertWithType('error', state.signupError);
+            changeState('signupError', '')
+        }
+    }, [state.signupError])
 
     return (
         <Modal
@@ -31,61 +54,75 @@ export default function OptModal(props) {
             visible={props.visible}
             onRequestClose={() => console.log('Modal has been closed')}
         >
-                {formVisible ?
-                    <View style={styles.formContainer}>
-                        <View style={styles.backContainer}>
-                            <TouchableOpacity onPress={() => setFormVisible(false)}>
-                                <Text style={styles.backButton}>X</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{flex: 9.5, alignItems: 'center'}}>
-                            <Text style={styles.formText}>How many face shield kits do you want delivered?{'\n\n'}(1 kit = 10 shields)</Text>
-                            <NumericInput
-                                type='up-down'
-                                onChange={value => changeState('numKits', value)}
-                                rounded
-                                minValue={0}
-                                maxValue={30}
-                                editable={false}
-                                textColor='white'
-                                totalWidth={width * 0.7}
-                                totalHeight={height * 0.15}
-                            />
-                            {state.numKits != 0 &&
-                                <AwesomeButtonRick
-                                    type='anchor'
-                                    onPress={initKitSignup}
-                                    borderRadius={15}
-                                    stretch={true}
-                                    backgroundColor={'#003366'}
-                                    backgroundDarker={'#003366'}
-                                    style={styles.kitButton}
-                                >
-                                    Sign Up for Kits
-                                </AwesomeButtonRick>
-                            }
-                        </View>
+            <DropdownAlert ref={ref => state.invalidRef = ref} />
+            {formVisible ?
+                <View style={styles.formContainer}>
+                    <View style={styles.backContainer}>
+                        <TouchableOpacity onPress={() => setFormVisible(false)}>
+                            <Text style={styles.backButton}>X</Text>
+                        </TouchableOpacity>
                     </View>
-                    :
-                    <View style={styles.centeredView}>
-                        <Text style={styles.modalHeader}>You have currently opted out from building</Text>
-                        <AwesomeButtonRick
-                            type='anchor'
-                            onPress={() => setFormVisible(true)}
-                            borderRadius={15}
-                            stretch={true}
-                            backgroundColor={'#003366'}
-                            backgroundDarker={'#003366'}
-                        >
-                            Opt In for Next Round
-                        </AwesomeButtonRick>
-                    </View>
-                }
+                    <View style={{flex: 9.5, alignItems: 'center'}}>
+                        <Text style={styles.formText}>How many face shield kits do you want delivered?{'\n\n'}(1 kit = 10 shields)</Text>
+                        <NumericInput
+                            type='up-down'
+                            onChange={value => changeState('numKits', value)}
+                            rounded
+                            minValue={0}
+                            maxValue={30}
+                            editable={false}
+                            textColor='white'
+                            totalWidth={width * 0.7}
+                            totalHeight={height * 0.15}
+                        />
+                        {state.numKits != 0 &&
+                            <AwesomeButtonRick
+                                type='anchor'
+                                onPress={initKitSignup}
+                                borderRadius={15}
+                                stretch={true}
+                                backgroundColor={'#003366'}
+                                backgroundDarker={'#003366'}
+                                style={styles.kitButton}
+                            >
+                                Sign Up for Kits
+                            </AwesomeButtonRick>
+                        }
+                        {state.spinner && 
+                            <ActivityIndicator style={styles.spinner} size='large' color='#FFFFFF' />
+                        }
+                    </View> 
+                </View>
+                :
+                <View style={styles.centeredView}>
+                    <Text style={styles.modalHeader}>You have currently opted out from building</Text>
+                    <AwesomeButtonRick
+                        type='anchor'
+                        onPress={() => setFormVisible(true)}
+                        borderRadius={15}
+                        stretch={true}
+                        backgroundColor={'#003366'}
+                        backgroundDarker={'#003366'}
+                    >
+                        Opt In for Next Round
+                    </AwesomeButtonRick>
+
+                    <Text style={{marginTop: '10%', color: 'white', fontSize: 20}}>Or</Text>
+
+                    <TouchableOpacity style={styles.signoutOpacity} onPress={signout}>
+                        <Icon name='sign-out' color='white' size={25} />
+                        <Text style={styles.signoutText}>Sign out instead</Text>
+                    </TouchableOpacity>
+                </View>
+            }
         </Modal>
     )
 }
 
 const styles = StyleSheet.create({
+    spinner: {
+        marginTop: '10%'
+    },
     centeredView: {
         flex: 1,
         justifyContent: 'center',
@@ -124,5 +161,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingBottom: '20%',
         fontWeight: 'bold'
+    },
+    signoutOpacity: {
+        marginTop: '10%',
+        flexDirection: 'row'
+    },
+    signoutText: {
+        color: 'white',
+        fontSize: 15,
+        marginLeft: '2%'
     }
 })
