@@ -20,13 +20,7 @@ const customSignup = (userInfo, uid, navigation, changeState) => {
 
             getDashboardInfo(uid).then((data) => {
                 changeState('spinner', false)
-                navigation.navigate('TabNavigator', {
-                    screen: 'Dashboard',
-                    params: { 
-                        screen: 'Dashboard',
-                        params: { uid, userInfo: data }
-                    }
-                })
+                navigation.navigate('TabNavigator', { uid, ...data })
             })
         })
         .catch(err => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { UserContext } from '../components/UserContext'
 
 import DashboardRoutes from '../components/DashboardRoutes';
 import TimelineScreen from '../screens/TimelineScreen';
@@ -23,20 +24,22 @@ const routeIcons = ({ route }) => ({
 
         return <Icon name={iconName} size={25} color={color} />;
     }
-});
+})
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function MyTabs() {
+export default function MyTabs({ route }) {
     return (
-        <Tab.Navigator
-            barStyle={{ backgroundColor: '#003366'}}
-            screenOptions={routeIcons}
-        >
-            <Tab.Screen name="Dashboard" component={DashboardRoutes} />
-            <Tab.Screen name="Timeline" component={TimelineScreen} />
-            <Tab.Screen name="Construction" component={ConstructionRoutes} />
-            <Tab.Screen name="Profile" component={Profile} />
-        </Tab.Navigator>
-    );
+        <UserContext.Provider value={route.params}>
+            <Tab.Navigator
+                barStyle={{ backgroundColor: '#003366'}}
+                screenOptions={routeIcons}
+            >
+                <Tab.Screen name="Dashboard" component={DashboardRoutes} />
+                <Tab.Screen name="Timeline" component={TimelineScreen} />
+                <Tab.Screen name="Construction" component={ConstructionRoutes} />
+                <Tab.Screen name="Profile" component={Profile} />
+            </Tab.Navigator>
+        </UserContext.Provider>
+    )
 }

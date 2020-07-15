@@ -1,9 +1,43 @@
-import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native'
+import React, { useState, useEffect, useContext } from 'react'
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import auth from '@react-native-firebase/auth'
+import { UserContext } from '../components/UserContext'
 
 export default function Profile(props) {
+    const userContext = useContext(UserContext)
+    const [state, setState] = useState({
+        uid: -1,
+        name: '',
+        roundNumber: 0,
+        assignedShields: 0,
+        builtShields: 0,
+        brokenShields: 0,
+        totalMasksBuilt: 0,
+        optedOut: true,
+        notifications: []        
+    })
+
+    const changeState = (id, val) => {
+        setState(prevState => ({
+            ...prevState,
+            [id]: val
+        }))
+    }
+
+    useEffect(() => {
+        console.log('User Info Context: ', JSON.stringify(userContext, null, 2))
+        changeState('uid', userContext.uid)
+        changeState('name', userContext.name)
+        changeState('roundNumber', userContext.currentRound)
+        changeState('optedOut', userContext.optedOut)
+        changeState('assignedShields', userContext.numMasksAssigned)
+        changeState('builtShields', userContext.numMasksBuilt)
+        changeState('brokenShields', userContext.numMasksBroken)
+        changeState('notifications', userContext.notifications)
+        changeState('totalMasksBuilt', userContext.totalMasksBuilt)
+    }, [])
+
     const signout = () => {
         auth()
             .signOut()
@@ -14,26 +48,23 @@ export default function Profile(props) {
     }
 
     return (
-        <View style={{ flex: 1, flexDirection: 'column' }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.header}>
-                <Text style={styles.title}>
-                    Sarah Ryu
-                </Text>
+                <Text style={styles.title}>{state.name}</Text>
             </View>
-            <View style={styles.maincontainer}>
+            <View style={styles.mainContainer}>
                 <View style={styles.progressContainer}>
                     <Text style={styles.headerText}>Shields Assigned This Round</Text>
-
                     <View style={styles.profileStatsContainer}>
                         <View style={styles.profileStats}>
-                            <Text style={styles.statsNumber}>2</Text>
+                            <Text style={styles.statsNumber}>{state.assignedShields / 10}</Text>
                             <Text style={styles.statsText}>Kits</Text>
                         </View>
 
                         <View style={styles.verticalSeparator} />
 
                         <View style={styles.profileStats}>
-                            <Text style={styles.statsNumber}>20</Text>
+                            <Text style={styles.statsNumber}>{state.assignedShields}</Text>
                             <Text style={styles.statsText}>Shields</Text>
                         </View>
                     </View>
@@ -41,32 +72,25 @@ export default function Profile(props) {
 
                 <View style={styles.progressContainer}>
                     <Text style={styles.headerText}>Total Shield Records</Text>
-
                     <View style={styles.profileStatsContainer}>
                         <View style={styles.profileStats}>
-                            <Text style={styles.statsNumber}>30</Text>
+                            <Text style={styles.statsNumber}>{state.totalMasksBuilt / 10}</Text>
                             <Text style={styles.statsText}>Kits</Text>
                         </View>
 
                         <View style={styles.verticalSeparator} />
 
                         <View style={styles.profileStats}>
-                            <Text style={styles.statsNumber}>300</Text>
+                            <Text style={styles.statsNumber}>{state.totalMasksBuilt}</Text>
                             <Text style={styles.statsText}>Shields</Text>
                         </View>
                     </View>
                 </View>
-                
-                <View style={{flex: 3}}>
-                    <Text style={styles.headerText}>You are building shields next round</Text>
-                    <TouchableOpacity style={styles.buttonContainer}>
+
+                <View style={{flex: 1, marginTop: '15%'}}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={() => Linking.openURL('mailto:gilaniasher@gmail.com')}>
 						<Text style={{ color: '#666666', fontSize: 24 }}>
-							Invite Friends
-            			</Text>
-					</TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonContainer}>
-						<Text style={{ color: '#666666', fontSize: 24 }}>
-							Settings
+							Problems? Email Us!
             			</Text>
 					</TouchableOpacity>
                 </View>
@@ -78,32 +102,33 @@ export default function Profile(props) {
                     stretch={true}
                     backgroundColor={'#003366'}
                     backgroundDarker={'#003366'}
+                    style={{marginBottom: '10%'}}
                 >
                     Sign Out
                 </AwesomeButtonRick>
             </View>
-        </View>
-    );
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
     header: {
-        flex: 1.2,
+        flex: 1,
+        padding: '3%',
+        paddingHorizontal: '6%',
         backgroundColor: '#003366',
         alignItems: 'center'
     },
     title: {
-        marginTop: Platform.OS == 'ios' ? '20%' : '1%',
-        marginHorizontal: '18%',
         textAlign: 'center',
-        lineHeight: 49,
+        textAlignVertical: 'center',
+        width: '100%',
+        height: '100%',
         color: '#FFFFFF',
-        fontSize: 36,
-        fontWeight: 'bold',
-        justifyContent: 'center',
-        alignItems: 'center',
+        fontSize: 35,
+        fontWeight: 'bold'
     }, 
-    maincontainer: {
+    mainContainer: {
         flex: 9.5,
         alignItems: 'center',
         justifyContent: 'space-around',
@@ -113,23 +138,22 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     headerText: {
-        width: '100%',
         color: 'black',
         fontSize: 20,
         textAlign: 'left',
-        paddingVertical: '5%',
-        paddingHorizontal: '5%',
+        paddingVertical: '2%',
+        paddingHorizontal: '5%'
     },
     progressContainer: {
-        flex: 1.5,
-        paddingBottom: 30,
+        flex: 1
     },
     profileStats: {
         flexDirection: 'column',
         paddingBottom: 20
     },
     profileStatsContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        width: '100%'
     },
     verticalSeparator: {
         height: '60%',
@@ -148,12 +172,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: '20%',
         fontSize: 15,
-    }, buttonContainer: {
+    },
+    buttonContainer: {
 		alignItems: 'center',
 		justifyContent: 'center',
-        marginBottom: '3%',
         borderColor: '#666666',
-        borderRadius: 10,
-        borderWidth: 2
+        borderRadius: 15,
+        borderWidth: 1.5,
+        padding: 10,
+        paddingHorizontal: '10%'
 	},
-});
+})

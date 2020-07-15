@@ -37,13 +37,7 @@ export default function Entry(props) {
             changeState('spinner', true)
             getDashboardInfo(user.uid).then((data) => {
                 changeState('spinner', false)
-                props.navigation.navigate('TabNavigator', {
-                    screen: 'Dashboard',
-                    params: { 
-                        screen: 'Dashboard',
-                        params: { uid: user.uid, userInfo: data }
-                    }
-                })
+                props.navigation.navigate('TabNavigator', { uid: user.uid, ...data })
             })
         }
     }, [user])

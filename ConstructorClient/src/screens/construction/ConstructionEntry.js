@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
-
-const initialAssignedShields = 40;
+import React, { useState, useContext } from 'react'
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import { UserContext } from '../../components/UserContext'
 
 export default function ConstructionEntry(props) {
-    const [assignedShields, setAssignedShields] = useState(initialAssignedShields);
+    const userContext = useContext(UserContext)
+    const [assignedShields, setAssignedShields] = useState(userContext.numMasksAssigned)
     
     return (
         <SafeAreaView style={styles.container}>
@@ -69,7 +69,7 @@ export default function ConstructionEntry(props) {
                 </View>
             </View>
         </SafeAreaView>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.3)',
     }
-});
+})

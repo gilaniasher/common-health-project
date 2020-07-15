@@ -58,10 +58,10 @@ def lambda_handler(event, context):
 
     # Query for name
     cur.execute('''
-        SELECT name FROM constructors WHERE id = %s
+        SELECT name, num_masks_built FROM constructors WHERE id = %s
     ''', (uid,))
 
-    name = cur.fetchone()[0]
+    name, total_masks_built = cur.fetchone()
 
     # Query for notifications
     notifications = []
@@ -79,6 +79,7 @@ def lambda_handler(event, context):
             'numMasksAssigned': num_masks_assigned,
             'numMasksBuilt': num_masks_built,
             'numMasksBroken': num_masks_broken,
-            'notifications': notifications
+            'notifications': notifications,
+            'totalMasksBuilt': total_masks_built
         }),
     }

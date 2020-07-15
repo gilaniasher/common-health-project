@@ -68,13 +68,7 @@ export default function Login(props) {
         if (user) {
             getDashboardInfo(user.uid).then((data) => {
                 changeState('spinner', false)
-                props.navigation.navigate('TabNavigator', {
-                    screen: 'Dashboard',
-                    params: {
-                        screen: 'Dashboard',
-                        params: { uid: user.uid, userInfo: data }
-                    }
-                })
+                props.navigation.navigate('TabNavigator', { uid: user.uid, ...data })
             }).catch(error => {
                 changeState('spinner', false)
             })

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue';
-import NotificationBubble from '../components/NotificationBubble';
-import logo from '../images/logo.png';
-import OptModal from '../components/OptModal';
+import React, { useState, useEffect, useContext } from 'react'
+import { SafeAreaView, View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import { UserContext } from '../components/UserContext'
+import NotificationBubble from '../components/NotificationBubble'
+import logo from '../images/logo.png'
+import OptModal from '../components/OptModal'
 
 export default function Dashboard(props) {
+    const userContext = useContext(UserContext)
     const [state, setState] = useState({
-        data: {},
+        uid: -1,
         name: '',
         roundNumber: 0,
         assignedShields: 0,
@@ -25,19 +27,15 @@ export default function Dashboard(props) {
     }
 
     useEffect(() => {
-        console.log('Dashboard', JSON.stringify(state.data, null, 2))
-
-        changeState('name', state.data.name)
-        changeState('roundNumber', state.data.currentRound)
-        changeState('optedOut', state.data.optedOut)
-        changeState('assignedShields', state.data.numMasksAssigned)
-        changeState('builtShields', state.data.numMasksBuilt)
-        changeState('brokenShields', state.data.numMasksBroken)
-        changeState('notifications', state.data.notifications)
-    }, [state.data]);
-
-    useEffect(() => {
-        changeState('data', props.route.params.userInfo)
+        console.log('User Info Context: ', JSON.stringify(userContext, null, 2))
+        changeState('uid', userContext.uid)
+        changeState('name', userContext.name)
+        changeState('roundNumber', userContext.currentRound)
+        changeState('optedOut', userContext.optedOut)
+        changeState('assignedShields', userContext.numMasksAssigned)
+        changeState('builtShields', userContext.numMasksBuilt)
+        changeState('brokenShields', userContext.numMasksBroken)
+        changeState('notifications', userContext.notifications)
     }, [])
 
     const renderNotification = ({ item }) => {
@@ -46,14 +44,14 @@ export default function Dashboard(props) {
                 text={item.text}
                 profImage={logo}
             />
-        );
+        )
     }
 
     return (
         <>
             <OptModal
                 visible={state.optedOut}
-                uid={props.route.params.uid}
+                uid={state.uid}
                 changeDashboardState={changeState} 
                 navigation={props.navigation}
             />
@@ -62,63 +60,65 @@ export default function Dashboard(props) {
                     <Text style={styles.bannerHeaderText}>Welcome {state.name}</Text>
                 </View>
 
-                <View style={styles.progressContainer}>
-                    <Text style={styles.headerText}>Shields Assigned This Round</Text>
+                <View style={{ flex: 9.5 }}>
+                    <View style={styles.progressContainer}>
+                        <Text style={styles.headerText}>Shields Assigned This Round</Text>
 
-                    <View style={styles.profileStatsContainer}>
-                        <View style={styles.profileStats}>
-                            <Text style={styles.statsNumber}>{state.assignedShields / 10}</Text>
-                            <Text style={styles.statsText}>Kits</Text>
+                        <View style={styles.profileStatsContainer}>
+                            <View style={styles.profileStats}>
+                                <Text style={styles.statsNumber}>{state.assignedShields / 10}</Text>
+                                <Text style={styles.statsText}>Kits</Text>
+                            </View>
+
+                            <View style={styles.verticalSeparator} />
+
+                            <View style={styles.profileStats}>
+                                <Text style={styles.statsNumber}>{state.assignedShields}</Text>
+                                <Text style={styles.statsText}>Shields</Text>
+                            </View>
                         </View>
 
-                        <View style={styles.verticalSeparator} />
-
-                        <View style={styles.profileStats}>
-                            <Text style={styles.statsNumber}>{state.assignedShields}</Text>
-                            <Text style={styles.statsText}>Shields</Text>
-                        </View>
+                        <TouchableOpacity 
+                            style={styles.timelineContainer} 
+                            onPress={() => props.navigation.navigate('Timeline')}
+                        >
+                            <Text style={styles.timelineLeft}>Timeline Status</Text>
+                            <Text style={styles.timelineRight}>{'>'}</Text>
+                        </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity 
-                        style={styles.timelineContainer} 
-                        onPress={() => props.navigation.navigate('Timeline')}
-                    >
-                        <Text style={styles.timelineLeft}>Timeline Status</Text>
-                        <Text style={styles.timelineRight}>{'>'}</Text>
-                    </TouchableOpacity>
-                </View>
+                    <View style={styles.bottomContainer}>
+                        <AwesomeButtonRick 
+                            type='anchor'
+                            onPress={() => props.navigation.navigate('Construction')}
+                            borderRadius={15}
+                            stretch={true}
+                            backgroundColor={'#003366'}
+                            backgroundDarker={'#003366'}
+                        >
+                            Construct Shields
+                        </AwesomeButtonRick>
 
-                <View style={styles.bottomContainer}>
-                    <AwesomeButtonRick 
-                        type='anchor'
-                        onPress={() => props.navigation.navigate('Construction')}
-                        borderRadius={15}
-                        stretch={true}
-                        backgroundColor={'#003366'}
-                        backgroundDarker={'#003366'}
-                    >
-                        Construct Shields
-                    </AwesomeButtonRick>
+                        <View style={styles.verticalSpacer} />
 
-                    <View style={styles.verticalSpacer} />
+                        <TouchableOpacity style={styles.notificationsHeader} onPress={() => props.navigation.navigate('Notifications')}>
+                            <Text style={[styles.normalText, {flex: 1}]}>Most Recent Notifications</Text>
+                            <Text style={[styles.normalText, {justifyContent: 'flex-end'}]}>{'>'}</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.notificationsHeader} onPress={() => props.navigation.navigate('Notifications')}>
-                        <Text style={[styles.normalText, {flex: 1}]}>Most Recent Notifications</Text>
-                        <Text style={[styles.normalText, {justifyContent: 'flex-end'}]}>{'>'}</Text>
-                    </TouchableOpacity>
+                        <View />
 
-                    <View />
-
-                    <FlatList 
-                        data={state.notifications}
-                        renderItem={renderNotification}
-                        keyExtractor={(item) => item.id}
-                        style={styles.notifications}
-                    />
+                        <FlatList 
+                            data={state.notifications}
+                            renderItem={renderNotification}
+                            keyExtractor={(item) => item.id}
+                            style={styles.notifications}
+                        />
+                    </View>
                 </View>
             </SafeAreaView>
         </>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -239,4 +239,4 @@ const styles = StyleSheet.create({
         padding: 20,
         paddingBottom: 0
     }
-});
+})
