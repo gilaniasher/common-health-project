@@ -1,23 +1,23 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import TabNavigator from '../screens/TabNavigator';
+import TabNavigator from '../screens/TabNavigator'
 
-import Entry from '../screens/Entry';
-import Signup from '../screens/Signup';
-import Login from '../screens/Login';
+import Entry from '../screens/Entry'
+import Signup from '../screens/Signup'
+import Login from '../screens/Login'
 
-import DashboardRoutes from '../components/DashboardRoutes';
-import Notifications from '../screens/Notifications';
+import DashboardRoutes from '../components/DashboardRoutes'
+import Notifications from '../screens/Notifications'
 
-import TimelineScreen from '../screens/TimelineScreen';
-import Profile from '../screens/Profile';
-import Settings from '../screens/Settings';
+import TimelineScreen from '../screens/TimelineScreen'
+import Profile from '../screens/Profile'
+import Settings from '../screens/Settings'
 
-import ConstructionRoutes from '../components/ConstructionRoutes';
+import ConstructionRoutes from '../components/ConstructionRoutes'
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 export default function Routes() {
     return (
@@ -35,5 +35,5 @@ export default function Routes() {
                 <Stack.Screen name='ConstructionRoutes' component={ConstructionRoutes} />
             </Stack.Navigator>
         </NavigationContainer>
-    );
+    )
 }
