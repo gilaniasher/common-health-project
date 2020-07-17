@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Modal, Image} from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import React, { useState, useContext } from 'react'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Modal, Image} from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import { UserContext } from '../../components/UserContext'
+import { submitKits } from '../../actions/KitSubmission'
+import Spinner from 'react-native-loading-spinner-overlay'
 import pic1 from '../../images/FinalQualityChecklist/temp1.jpg'
 import pic2 from '../../images/FinalQualityChecklist/temp2.jpg'
 import pic3 from '../../images/FinalQualityChecklist/temp3.jpg'
@@ -35,11 +38,14 @@ const data = [
         notification: 'The tool is NOT returned in the bag.',
         image: pic5
     },
-]; 
+] 
 
 export default function FinalQualityChecklist(props) {
-    const [modalVisible, setModalVisible] = useState(false);
+    const userContext = useContext(UserContext)
+    const assignedShields = userContext.numMasksAssigned
+    const uid = userContext.uid
 
+    const [modalVisible, setModalVisible] = useState(false)
     const [state, setState] = useState({
         1: false,
         2: false,
@@ -47,6 +53,8 @@ export default function FinalQualityChecklist(props) {
         4: false,
         5: false,
         currentImage: null,
+        spinner: false,
+        signupError: ''
     })
 
     const changeState = (id, val) => {
@@ -56,8 +64,18 @@ export default function FinalQualityChecklist(props) {
         }))
     }
 
+    const submitBtn = () => {
+        changeState('spinner', true)
+        submitKits(uid, assignedShields, changeState, props.navigation)
+    }
+
     return (
         <>
+            <Spinner
+                visible={state.spinner}
+                textContent={'Loading...'}
+                textStyle={{ color: '#FFF' }}
+            />
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -125,15 +143,18 @@ export default function FinalQualityChecklist(props) {
                         borderRadius={20}
                         stretch={true}
                         style={styles.submitButton}
+                        onPress={submitBtn}
                         >
-                            Submit
+                            <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
+                                Submit {assignedShields} Shields
+                            </Text>
                         </AwesomeButtonRick> 
                     }
                 </View>
 
             </SafeAreaView>
         </>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -203,4 +224,4 @@ const styles = StyleSheet.create({
     closeImage: {
         color: 'white'
     },
-});
+})

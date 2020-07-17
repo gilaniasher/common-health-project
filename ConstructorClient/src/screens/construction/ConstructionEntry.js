@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import { UserContext } from '../../components/UserContext'
 
 export default function ConstructionEntry(props) {
     const userContext = useContext(UserContext)
-    const [assignedShields, setAssignedShields] = useState(userContext.numMasksAssigned)
+    const assignedShields = userContext.numMasksAssigned
     
     return (
         <SafeAreaView style={styles.container}>

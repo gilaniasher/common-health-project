@@ -41,6 +41,18 @@ Resources:
           Properties:
             Path: /KitSignup
             Method: post
+  SubmitShieldsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: submit_shields/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        SubmitShields:
+          Type: Api
+          Properties:
+            Path: /SubmitShields
+            Method: post
 Outputs:
   SignupApi:
     Description: API Gateway Signup for CHP
@@ -69,3 +81,12 @@ Outputs:
   KitSignupRequestIamRole:
     Description: Implicit IAM Role created for KitSignup Request function
     Value: KitSignupFunctionRole.Arn
+  SubmitShieldsApi:
+    Description: API Gateway SubmitShields for CHP
+    Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/SubmitShields
+  SubmitShieldsFunction:
+    Description: SubmitShields Lambda Function ARN
+    Value: SubmitShieldsFunction.Arn
+  SubmitShieldsRequestIamRole:
+    Description: Implicit IAM Role created for SubmitShields Request function
+    Value: SubmitShieldsFunctionRole.Arn

@@ -1,17 +1,18 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import ConstructionEntry from '../screens/construction/ConstructionEntry';
-import KitConfirmation from '../screens/construction/KitConfirmation';
-import ConstructionInstructions from '../screens/construction/ConstructionInstructions';
-import FinalQualityChecklist from '../screens/construction/FinalQualityChecklist';
-import BrokenShieldForm from '../screens/construction/BrokenShieldForm';
-import TutorialSteps from '../screens/construction/TutorialSteps';
-import TutorialVideo from '../screens/construction/TutorialVideo';
-import TutorialTips from '../screens/construction/TutorialTips';
+import ConstructionEntry from '../screens/construction/ConstructionEntry'
+import KitConfirmation from '../screens/construction/KitConfirmation'
+import ConstructionInstructions from '../screens/construction/ConstructionInstructions'
+import FinalQualityChecklist from '../screens/construction/FinalQualityChecklist'
+import BrokenShieldForm from '../screens/construction/BrokenShieldForm'
+import TutorialSteps from '../screens/construction/TutorialSteps'
+import TutorialVideo from '../screens/construction/TutorialVideo'
+import TutorialTips from '../screens/construction/TutorialTips'
+import Success from '../screens/construction/Success'
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 export default function ConstructionRoutes() {
     return (
@@ -25,7 +26,8 @@ export default function ConstructionRoutes() {
                 <Stack.Screen name='TutorialTips' component={TutorialTips} />
                 <Stack.Screen name='BrokenShieldForm' component={BrokenShieldForm} />
                 <Stack.Screen name='FinalQualityChecklist' component={FinalQualityChecklist} />
+                <Stack.Screen name='Success' component={Success} />
             </Stack.Navigator>
         </NavigationContainer>
-    );
+    )
 }
