@@ -5,6 +5,8 @@ import { UserContext } from '../components/UserContext'
 import NotificationBubble from '../components/NotificationBubble'
 import logo from '../images/logo.png'
 import OptModal from '../components/OptModal'
+import messaging from '@react-native-firebase/messaging'
+import DropDownHolder from '../components/DropDownHolder'
 
 export default function Dashboard(props) {
     const userContext = useContext(UserContext)
@@ -26,6 +28,26 @@ export default function Dashboard(props) {
         }))
     }
 
+    const getFcmToken = async () => {
+        const fcmToken = await messaging().getToken()
+
+        if (fcmToken) {
+            console.log('FCM token:', fcmToken)
+        } else {
+            console.log('Failed', 'No token received')
+        }
+    }
+
+    const requestUserPermission = async () => {
+        const authStatus = await messaging().requestPermission()
+        const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL
+
+        if (enabled) {
+            getFcmToken()
+            console.log('Authorization status:', authStatus)
+        }
+    }
+
     useEffect(() => {
         console.log('User Info Context: ', JSON.stringify(userContext, null, 2))
         changeState('uid', userContext.uid)
@@ -36,6 +58,15 @@ export default function Dashboard(props) {
         changeState('builtShields', userContext.numMasksBuilt)
         changeState('brokenShields', userContext.numMasksBroken)
         changeState('notifications', userContext.notifications)
+    }, [])
+
+    useEffect(() => {
+        requestUserPermission()
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            console.log('FCM Notification: ', JSON.stringify(remoteMessage))
+            DropDownHolder.dropDown.alertWithType('info', remoteMessage.notification.title, remoteMessage.notification.body)
+        })
+        return unsubscribe
     }, [])
 
     const renderNotification = ({ item }) => {
