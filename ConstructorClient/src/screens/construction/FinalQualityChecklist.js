@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Modal
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
-import pic1 from '../../images/FinalQualityChecklist/temp1.jpg'
-import pic2 from '../../images/FinalQualityChecklist/temp2.jpg'
-import pic3 from '../../images/FinalQualityChecklist/temp3.jpg'
-import pic4 from '../../images/FinalQualityChecklist/temp4.jpg'
-import pic5 from '../../images/FinalQualityChecklist/temp5.jpg'
+import pic1 from '../../images/FinalQualityChecklist/step1.png'
+import pic2 from '../../images/FinalQualityChecklist/step2.png'
+import pic3 from '../../images/FinalQualityChecklist/step3.png'
+import pic4 from '../../images/FinalQualityChecklist/step4.png'
+import pic5 from '../../images/FinalQualityChecklist/step5.jpg'
 
 const data = [
     {
@@ -204,10 +204,12 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(46, 49, 49, 0.9)",
     },
     image: {
-        height: '30%',
-        width: '50%',
+        height: '40%',
+        width: '90%',
     },
     closeImage: {
-        color: 'white'
+        color: 'white',
+        paddingTop: '5%',
+        fontSize: 18
     },
 })
