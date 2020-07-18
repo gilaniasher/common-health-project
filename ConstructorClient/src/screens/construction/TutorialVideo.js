@@ -1,6 +1,9 @@
-import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Linking, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React from 'react'
+import { SafeAreaView, View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
+import { Thumbnail } from 'react-native-thumbnail-video'
+
+const width = Dimensions.get('window').width
 
 export default function TutorialVideo(props) {
     return (
@@ -13,16 +16,14 @@ export default function TutorialVideo(props) {
             </View>
 
             <View style={styles.bottomContainer}>
-                <Text style={styles.text}>Link to video: </Text>
-                <Text 
-                    onPress={() => Linking.openURL('https://www.youtube.com/watch?v=Pyt_wHThplo')}
-                    style={styles.link}
-                >
-                    Video Instructions
-                </Text>
+                <Text style={styles.text}>Link to Video</Text>
+                <Thumbnail
+                    url='https://www.youtube.com/watch?v=Pyt_wHThplo'
+                    imageWidth={width / 1.2}
+                />
             </View>
         </SafeAreaView>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -51,10 +52,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        fontSize: 40
+        fontSize: 40,
+        fontWeight: 'bold',
+        paddingBottom: '8%'
     },
     link: {
         fontSize: 30,
         color: 'blue'
     }
-});
+})

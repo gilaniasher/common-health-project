@@ -30,6 +30,7 @@
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.5",
     "react-native-screens": "^2.9.0",
+    "react-native-thumbnail-video": "^0.1.2",
     "react-native-timeline-flatlist": "^0.7.2",
     "react-native-vector-icons": "^6.6.0",
     "react-native-webview": "^10.3.1",
