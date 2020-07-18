@@ -1,11 +1,31 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import { UserContext } from '../../components/UserContext'
+import DropDownHolder from '../../components/DropDownHolder'
 
 export default function ConstructionEntry(props) {
     const userContext = useContext(UserContext)
     const assignedShields = userContext.numMasksAssigned
+    const [state, setState] = useState({
+        finalChecklistCompleted: false
+    })
+
+    const changeState = (id, val) => {
+        setState(prevState => ({
+            ...prevState,
+            [id]: val
+        }))
+    }
+
+    const submitShields = () => {
+        if (state.finalChecklistCompleted) {
+            props.navigation.navigate('RoundReport')
+        } else {
+            console.log(props.route.params)
+            DropDownHolder.dropDown.alertWithType('error', 'Please complete the final quality checklist!')
+        }
+    }
     
     return (
         <SafeAreaView style={styles.container}>
@@ -32,39 +52,32 @@ export default function ConstructionEntry(props) {
             </View>
 
             <View style={styles.bottomContainer}>
-                <Text style={[styles.normalText, {paddingLeft: 20}]}>Complete these three steps</Text>
-
-                <TouchableOpacity 
-                    style={[styles.stepContainer, {borderBottomWidth: 0}]}
-                    onPress={() => props.navigation.navigate('KitConfirmation')}
-                >
-                    <Text style={styles.stepText}>1. Face Shield Kit Confirmation</Text>
-                </TouchableOpacity>
+                <Text style={[styles.normalText, {paddingLeft: 20}]}>Complete these steps</Text>
 
                 <TouchableOpacity 
                     style={[styles.stepContainer, {borderBottomWidth: 0}]}
                     onPress={() => props.navigation.navigate('ConstructionInstructions')}
                 >
-                    <Text style={styles.stepText}>2. Construction Instructions</Text>
+                    <Text style={styles.stepText}>1. Construction Instructions</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
                     style={styles.stepContainer}
-                    onPress={() => props.navigation.navigate('FinalQualityChecklist')}
+                    onPress={() => props.navigation.navigate('FinalQualityChecklist', { changeState })}
                 >
-                    <Text style={styles.stepText}>3. Final Quality Checklist</Text>
+                    <Text style={styles.stepText}>2. Final Quality Checklist</Text>
                 </TouchableOpacity>
 
-                <View style={{paddingTop: '8%', paddingHorizontal: 20}}>
+                <View style={{paddingTop: '15%', paddingHorizontal: 20}}>
                     <AwesomeButtonRick 
                         type='anchor'
-                        onPress={() => props.navigation.navigate('BrokenShieldForm')}
+                        onPress={submitShields}
                         borderRadius={15}
                         stretch={true}
                         backgroundColor={'#003366'}
                         backgroundDarker={'#003366'}
                     >
-                        Report Broken Shield
+                        Submit Shields, Broken Ones Too!
                     </AwesomeButtonRick>
                 </View>
             </View>
@@ -129,8 +142,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     bottomContainer: {
-        flex: 6,
-        paddingVertical: 15
+        flex: 6
     },
     normalText: {
         fontSize: 15,

@@ -3,9 +3,6 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Modal
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
-import { UserContext } from '../../components/UserContext'
-import { submitKits } from '../../actions/KitSubmission'
-import Spinner from 'react-native-loading-spinner-overlay'
 import pic1 from '../../images/FinalQualityChecklist/temp1.jpg'
 import pic2 from '../../images/FinalQualityChecklist/temp2.jpg'
 import pic3 from '../../images/FinalQualityChecklist/temp3.jpg'
@@ -41,10 +38,6 @@ const data = [
 ] 
 
 export default function FinalQualityChecklist(props) {
-    const userContext = useContext(UserContext)
-    const assignedShields = userContext.numMasksAssigned
-    const uid = userContext.uid
-
     const [modalVisible, setModalVisible] = useState(false)
     const [state, setState] = useState({
         1: false,
@@ -52,9 +45,7 @@ export default function FinalQualityChecklist(props) {
         3: false,
         4: false,
         5: false,
-        currentImage: null,
-        spinner: false,
-        signupError: ''
+        currentImage: null
     })
 
     const changeState = (id, val) => {
@@ -65,17 +56,12 @@ export default function FinalQualityChecklist(props) {
     }
 
     const submitBtn = () => {
-        changeState('spinner', true)
-        submitKits(uid, assignedShields, changeState, props.navigation)
+        props.route.params.changeState('finalChecklistCompleted', true)
+        props.navigation.goBack()
     }
 
     return (
         <>
-            <Spinner
-                visible={state.spinner}
-                textContent={'Loading...'}
-                textStyle={{ color: '#FFF' }}
-            />
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -146,7 +132,7 @@ export default function FinalQualityChecklist(props) {
                         onPress={submitBtn}
                         >
                             <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
-                                Submit {assignedShields} Shields
+                                I have done all these things!
                             </Text>
                         </AwesomeButtonRick> 
                     }

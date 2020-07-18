@@ -6,7 +6,7 @@ import Notifications from '../screens/Notifications';
 
 const Stack = createStackNavigator();
 
-export default function ConstructionRoutes() {
+export default function DashboardRoutes() {
     return (
         <Stack.Navigator initialRouteName='Dashboard' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='Dashboard' component={Dashboard} />
