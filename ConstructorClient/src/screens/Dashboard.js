@@ -77,14 +77,6 @@ export default function Dashboard(props) {
                                 <Text style={styles.statsText}>Shields</Text>
                             </View>
                         </View>
-
-                        <TouchableOpacity 
-                            style={styles.timelineContainer} 
-                            onPress={() => props.navigation.navigate('Timeline')}
-                        >
-                            <Text style={styles.timelineLeft}>Timeline Status</Text>
-                            <Text style={styles.timelineRight}>{'>'}</Text>
-                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.bottomContainer}>
@@ -163,7 +155,7 @@ const styles = StyleSheet.create({
         paddingLeft: '5%'
     },
     progressContainer: {
-        flex: 3.5,
+        flex: 2,
         paddingBottom: 30
     },
     profileStats: {

@@ -7,10 +7,7 @@ import TabNavigator from '../screens/TabNavigator'
 import Entry from '../screens/Entry'
 import Signup from '../screens/Signup'
 import Login from '../screens/Login'
-
-import DashboardRoutes from '../components/DashboardRoutes'
-import Notifications from '../screens/Notifications'
-
+import Dashboard from '../screens/Dashboard';
 import TimelineScreen from '../screens/TimelineScreen'
 import Profile from '../screens/Profile'
 import Settings from '../screens/Settings'
@@ -27,8 +24,7 @@ export default function Routes() {
                 <Stack.Screen name='Entry' component={Entry} />
                 <Stack.Screen name='Signup' component={Signup} />
                 <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='DashboardRoutes' component={DashboardRoutes} />
-                <Stack.Screen name='Notifications' component={Notifications} />
+                <Stack.Screen name='Dashboard' component={Dashboard} />
                 <Stack.Screen name='TimelineScreen' component={TimelineScreen} />
                 <Stack.Screen name='Profile' component={Profile} />
                 <Stack.Screen name='Settings' component={Settings} />
