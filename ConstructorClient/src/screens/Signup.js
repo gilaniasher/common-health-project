@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { SafeAreaView, View, Text, StyleSheet, ScrollView } from 'react-native'
 import { TextField } from 'react-native-material-textfield'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
+import Spinner from 'react-native-loading-spinner-overlay'
+import messaging from '@react-native-firebase/messaging'
 import { signup } from '../actions/Authentication'
-import Spinner from 'react-native-loading-spinner-overlay';
+import { subscribeToTopic } from '../actions/SubscribeToTopic'
+import { Picker } from '@react-native-community/picker'
+
+const counties = [
+    'Morris', 'Bergen', 'Middlesex', 'Essex/Passaic Union'
+]
 
 export default function Signup(props) {
     const [signupDisabled, setSignupDisabled] = useState(true)
@@ -25,7 +32,7 @@ export default function Signup(props) {
         }))
     }
 
-    const initSignup = () => {
+    const initSignup = async () => {
         signup({
             name: `${state.firstname} ${state.lastname}`,
             email: state.email,
@@ -34,6 +41,10 @@ export default function Signup(props) {
             phone: state.phone,
             password: state.password
         }, props.navigation, changeState)
+
+        const fcmToken = await messaging().getToken()
+
+        subscribeToTopic(fcmToken, state.county)
     }
 
     useEffect(() => {
@@ -46,9 +57,7 @@ export default function Signup(props) {
 
         if (valid) {
             setSignupDisabled(false)
-        }
-
-        else {
+        } else {
             setSignupDisabled(true)
         }
     }, [state])
@@ -85,13 +94,6 @@ export default function Signup(props) {
                     onChangeText={(msg) => changeState('address', msg)}
                 />
                 <TextField
-                    label='County'
-                    textColor='#003366'
-                    tintColor='#003366'
-                    baseColor='#003366'
-                    onChangeText={(msg) => changeState('county', msg)}
-                />
-                <TextField
                     label='Phone Number'
                     textColor='#003366'
                     tintColor='#003366'
@@ -113,6 +115,14 @@ export default function Signup(props) {
                     onChangeText={(msg) => changeState('password', msg)}
                     secureTextEntry={true}
                 />
+
+                <Picker
+                    selectedValue={state.county}
+                    onValueChange={val => changeState('county', val)}
+                    style={{ color: '#003366', paddingTop: 100 }}
+                >
+                    { counties.map(c => <Picker.Item label={c} value={c} />) }
+                </Picker>
             </ScrollView>
 
             <View style={styles.separator} />
@@ -127,7 +137,7 @@ export default function Signup(props) {
                 Sign Up
             </AwesomeButtonRick>
         </SafeAreaView>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -148,4 +158,4 @@ const styles = StyleSheet.create({
     separator: {
         height: '10%'
     }
-});
+})
