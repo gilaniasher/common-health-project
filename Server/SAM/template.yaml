@@ -53,6 +53,18 @@ Resources:
           Properties:
             Path: /SubmitShields
             Method: post
+  SubscribeToCountyNotifsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: subscribe_to_county_notifs/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        SubscribeToCountyNotifs:
+          Type: Api
+          Properties:
+            Path: /SubscribeToCountyNotifs
+            Method: post
 Outputs:
   SignupApi:
     Description: API Gateway Signup for CHP
@@ -90,3 +102,12 @@ Outputs:
   SubmitShieldsRequestIamRole:
     Description: Implicit IAM Role created for SubmitShields Request function
     Value: SubmitShieldsFunctionRole.Arn
+  SubscribeToCountyNotifsApi:
+    Description: API Gateway SubscribeToCountyNotifs for CHP
+    Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/SubscribeToCountyNotifs
+  SubscribeToCountyNotifsFunction:
+    Description: SubscribeToCountyNotifs Lambda Function ARN
+    Value: SubscribeToCountyNotifsFunction.Arn
+  SubscribeToCountyNotifsRequestIamRole:
+    Description: Implicit IAM Role created for SubscribeToCountyNotifs Request function
+    Value: SubscribeToCountyNotifsFunctionRole.Arn
