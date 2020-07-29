@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { BackHandler } from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { UserContext } from '../components/UserContext'
@@ -28,6 +29,11 @@ const routeIcons = ({ route }) => ({
 const Tab = createMaterialBottomTabNavigator()
 
 export default function MyTabs({ route }) {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () => BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
     return (
         <UserContext.Provider value={route.params}>
             <Tab.Navigator

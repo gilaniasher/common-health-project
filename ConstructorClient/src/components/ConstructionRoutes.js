@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { BackHandler } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -14,6 +15,11 @@ import Success from '../screens/construction/Success'
 const Stack = createStackNavigator()
 
 export default function ConstructionRoutes() {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () => BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
     return (
         <NavigationContainer independent={true}>
             <Stack.Navigator initialRouteName='ConstructionEntry' screenOptions={{ headerShown: false }}>
