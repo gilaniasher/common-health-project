@@ -58,13 +58,27 @@ def lambda_handler(event, context):
 
     # Query for name
     cur.execute('''
-        SELECT name, num_masks_built FROM constructors WHERE id = %s
+        SELECT name, num_masks_built, county
+        FROM constructors
+        WHERE id = %s
     ''', (uid,))
 
-    name, total_masks_built = cur.fetchone()
+    name, total_masks_built, county = cur.fetchone()
 
     # Query for notifications
+    cur.execute('''
+        SELECT time, title, body
+        FROM notifications
+        WHERE county = %s
+        ORDER BY time DESC
+        LIMIT 25
+    ''', (county,))
+
     notifications = []
+
+    if (results := cur.fetchall()):
+        for time, title, body in results:
+            notifications.append((time.strftime('%m/%d/%Y, %-I:%M%p'), title, body))
 
     if conn is not None:
         cur.close()
@@ -80,6 +94,7 @@ def lambda_handler(event, context):
             'numMasksBuilt': num_masks_built,
             'numMasksBroken': num_masks_broken,
             'notifications': notifications,
-            'totalMasksBuilt': total_masks_built
+            'totalMasksBuilt': total_masks_built,
+            'county': county
         }),
     }

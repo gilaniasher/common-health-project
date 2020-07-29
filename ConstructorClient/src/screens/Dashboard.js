@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import { SafeAreaView, View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/blue'
 import { UserContext } from '../components/UserContext'
-import NotificationBubble from '../components/NotificationBubble'
-import logo from '../images/logo.png'
 import OptModal from '../components/OptModal'
 import messaging from '@react-native-firebase/messaging'
 import DropDownHolder from '../components/DropDownHolder'
@@ -70,15 +68,6 @@ export default function Dashboard(props) {
         return unsubscribe
     }, [])
 
-    const renderNotification = ({ item }) => {
-        return (
-            <NotificationBubble
-                text={item.text}
-                profImage={logo}
-            />
-        )
-    }
-
     return (
         <>
             <OptModal
@@ -125,7 +114,7 @@ export default function Dashboard(props) {
 
                         <View style={styles.verticalSpacer} />
 
-                        <TouchableOpacity style={styles.notificationsHeader} onPress={() => props.navigation.navigate('Notifications')}>
+                        <TouchableOpacity style={styles.notificationsHeader} onPress={() => props.navigation.navigate('Notifications', { data: state.notifications })}>
                             <Text style={[styles.normalText, {flex: 1}]}>Most Recent Notifications</Text>
                             <Text style={[styles.normalText, {justifyContent: 'flex-end'}]}>{'>'}</Text>
                         </TouchableOpacity>
@@ -133,7 +122,7 @@ export default function Dashboard(props) {
                         <View />
 
                         <View style={styles.notifications}>
-                            <NotificationArea />
+                            <NotificationArea data={state.notifications} />
                         </View>
                     </View>
                 </View>
@@ -258,7 +247,6 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         borderColor: 'rgba(128, 128, 128, 0.5)',
-        padding: 20,
-        paddingBottom: 0
+        padding: 20
     }
 })
