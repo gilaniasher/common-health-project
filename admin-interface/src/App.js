@@ -10,6 +10,8 @@ import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 
+import { scheduleRounds, scheduleKitDates, assignKits } from './actions/AdminActions'
+
 const Container = styled.div`
   display: flex;
   flex: 1;
@@ -59,26 +61,32 @@ const App = () => {
     assignKits: []
   }
 
-  const scheduleRounds = () => {
-    console.log('scheduling rounds', JSON.stringify({
+  const initScheduleRounds = () => {
+    const params = {
       'roundNum': state.scheduleRounds.roundNum.current.value,
       'startDate': state.scheduleRounds.startDate.current.value,
       'endDate': state.scheduleRounds.endDate.current.value
-    }, null, 2))
+    }
 
+    console.log('scheduling rounds', JSON.stringify(params, null, 2))
+    scheduleRounds(params)
   }
 
-  const scheduleKitDates = () => {
-    console.log('scheduling kit dates', JSON.stringify({
+  const initScheduleKitDates = () => {
+    const params = {
       'roundNum': state.scheduleKitDates.roundNum.current.value,
       'county': state.scheduleKitDates.county.current.value,
       'kitDropoffDate': state.scheduleKitDates.kitDropoff.current.value,
       'kitPickupDate': state.scheduleKitDates.kitPickup.current.value
-    }, null, 2))
+    }
+
+    console.log('scheduling kit dates', JSON.stringify(params, null, 2))
+    scheduleKitDates(params)
   }
 
-  const assignKits = () => {
+  const initAssignKits = () => {
     console.log('assigning kits', JSON.stringify(state.assignKits))
+    // assignKits()
   }
 
   return (
@@ -94,7 +102,7 @@ const App = () => {
           <TextField label='End Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleRounds.endDate} />
         </FormRow>
 
-        <Button size='large' color='primary' onClick={scheduleRounds}>
+        <Button size='large' color='primary' onClick={initScheduleRounds}>
           Submit
         </Button>
       </FormContainer>
@@ -115,7 +123,7 @@ const App = () => {
           <TextField label='Kit Pickup Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleKitDates.kitPickup} />
         </FormRow>
 
-        <Button size='large' color='primary' onClick={scheduleKitDates} >
+        <Button size='large' color='primary' onClick={initScheduleKitDates} >
           Submit
         </Button>
       </FormContainer>
@@ -145,7 +153,7 @@ const App = () => {
           </TableBody>
         </Table>
 
-        <Button size='large' color='primary' onClick={assignKits}>
+        <Button size='large' color='primary' onClick={initAssignKits}>
           Submit
         </Button>
       </FormContainer>

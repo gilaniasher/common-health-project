@@ -7,6 +7,7 @@ import logo from '../images/logo.png'
 import OptModal from '../components/OptModal'
 import messaging from '@react-native-firebase/messaging'
 import DropDownHolder from '../components/DropDownHolder'
+import { NotificationArea } from './Notifications'
 
 export default function Dashboard(props) {
     const userContext = useContext(UserContext)
@@ -131,12 +132,9 @@ export default function Dashboard(props) {
 
                         <View />
 
-                        <FlatList 
-                            data={state.notifications}
-                            renderItem={renderNotification}
-                            keyExtractor={(item) => item.id}
-                            style={styles.notifications}
-                        />
+                        <View style={styles.notifications}>
+                            <NotificationArea />
+                        </View>
                     </View>
                 </View>
             </SafeAreaView>
@@ -255,6 +253,7 @@ const styles = StyleSheet.create({
       width: '100%'
     },
     notifications: {
+        height: '100%',
         borderWidth: 1,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
