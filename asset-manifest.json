@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/common-health-project/static/css/main.610b2798.chunk.css",
+    "main.js": "/common-health-project/static/js/main.639dcf1b.chunk.js",
+    "main.js.map": "/common-health-project/static/js/main.639dcf1b.chunk.js.map",
+    "runtime-main.js": "/common-health-project/static/js/runtime-main.c09a9fc0.js",
+    "runtime-main.js.map": "/common-health-project/static/js/runtime-main.c09a9fc0.js.map",
+    "static/js/2.3bf2ef64.chunk.js": "/common-health-project/static/js/2.3bf2ef64.chunk.js",
+    "static/js/2.3bf2ef64.chunk.js.map": "/common-health-project/static/js/2.3bf2ef64.chunk.js.map",
+    "index.html": "/common-health-project/index.html",
+    "precache-manifest.09baf45be4182b0084dfbec073969d33.js": "/common-health-project/precache-manifest.09baf45be4182b0084dfbec073969d33.js",
+    "service-worker.js": "/common-health-project/service-worker.js",
+    "static/css/main.610b2798.chunk.css.map": "/common-health-project/static/css/main.610b2798.chunk.css.map",
+    "static/js/2.3bf2ef64.chunk.js.LICENSE.txt": "/common-health-project/static/js/2.3bf2ef64.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c09a9fc0.js",
+    "static/js/2.3bf2ef64.chunk.js",
+    "static/css/main.610b2798.chunk.css",
+    "static/js/main.639dcf1b.chunk.js"
+  ]
+}
