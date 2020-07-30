@@ -29,6 +29,18 @@ Resources:
           Properties:
             Path: /ScheduleDates
             Method: post
+  AdminLoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: admin_login/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        AdminLogin:
+          Type: Api
+          Properties:
+            Path: /AdminLogin
+            Method: post
 Outputs:
   AddRoundApi:
     Description: API Gateway AddRound for CHP
@@ -48,3 +60,12 @@ Outputs:
   ScheduleDatesRequestIamRole:
     Description: Implicit IAM Role created for ScheduleDates Request function
     Value: ScheduleDatesFunctionRole.Arn
+  AdminLoginApi:
+    Description: API Gateway AdminLogin for CHP
+    Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/AdminLogin
+  AdminLoginFunction:
+    Description: AdminLogin Lambda Function ARN
+    Value: AdminLoginFunction.Arn
+  AdminLoginRequestIamRole:
+    Description: Implicit IAM Role created for AdminLogin Request function
+    Value: AdminLoginFunctionRole.Arn

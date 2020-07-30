@@ -1,8 +1,9 @@
-import React, { useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { TextField, Button } from '@material-ui/core'
 import MenuItem from '@material-ui/core/MenuItem'
 import './App.css'
+import Login from './Login'
 
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
@@ -55,6 +56,9 @@ const counties = [
 ]
 
 const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   const state = {
     scheduleRounds: { roundNum: useRef(), startDate: useRef(), endDate: useRef() },
     scheduleKitDates: { roundNum: useRef(), county: useRef(), kitDropoff: useRef(), kitPickup: useRef() },
@@ -90,74 +94,77 @@ const App = () => {
   }
 
   return (
-    <Container>
-      <span>CHP Admin Interface</span>
+    loggedIn ?
+      <Container>
+        <span>CHP Admin Interface</span>
 
-      <FormContainer>
-        <FormTitle>Schedule Rounds</FormTitle>
+        <FormContainer>
+          <FormTitle>Schedule Rounds</FormTitle>
 
-        <FormRow>
-          <TextField label='Round #' variant='filled' inputRef={state.scheduleRounds.roundNum} />
-          <TextField label='Start Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleRounds.startDate} />
-          <TextField label='End Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleRounds.endDate} />
-        </FormRow>
+          <FormRow>
+            <TextField label='Round #' variant='filled' inputRef={state.scheduleRounds.roundNum} />
+            <TextField label='Start Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleRounds.startDate} />
+            <TextField label='End Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleRounds.endDate} />
+          </FormRow>
 
-        <Button size='large' color='primary' onClick={initScheduleRounds}>
-          Submit
-        </Button>
-      </FormContainer>
+          <Button size='large' color='primary' onClick={initScheduleRounds}>
+            Submit
+          </Button>
+        </FormContainer>
 
-      <FormContainer>
-        <FormTitle>Schedule Kit Dropoff/Pickup Dates</FormTitle>
+        <FormContainer>
+          <FormTitle>Schedule Kit Dropoff/Pickup Dates</FormTitle>
 
-        <FormRow>
-          <TextField label='Round #' variant='filled' inputRef={state.scheduleKitDates.roundNum} />
+          <FormRow>
+            <TextField label='Round #' variant='filled' inputRef={state.scheduleKitDates.roundNum} />
 
-          <TextField label='County' select variant='filled' defaultValue='Morris' inputRef={state.scheduleKitDates.county} >
-            {counties.map(option =>
-              <MenuItem key={option} value={option}>{option}</MenuItem>)
-            }
-          </TextField>
+            <TextField label='County' select variant='filled' defaultValue='Morris' inputRef={state.scheduleKitDates.county} >
+              {counties.map(option =>
+                <MenuItem key={option} value={option}>{option}</MenuItem>)
+              }
+            </TextField>
 
-          <TextField label='Kit Dropoff Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleKitDates.kitDropoff} />
-          <TextField label='Kit Pickup Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleKitDates.kitPickup} />
-        </FormRow>
+            <TextField label='Kit Dropoff Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleKitDates.kitDropoff} />
+            <TextField label='Kit Pickup Date' variant='filled' type='date' defaultValue='2020-07-25' inputRef={state.scheduleKitDates.kitPickup} />
+          </FormRow>
 
-        <Button size='large' color='primary' onClick={initScheduleKitDates} >
-          Submit
-        </Button>
-      </FormContainer>
+          <Button size='large' color='primary' onClick={initScheduleKitDates} >
+            Submit
+          </Button>
+        </FormContainer>
 
-      <FormContainer>
-        <FormTitle>Assign Kits for Next Round</FormTitle>
+        <FormContainer>
+          <FormTitle>Assign Kits for Next Round</FormTitle>
 
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Kits Desired</TableCell>
-              <TableCell>Num Kits to Assign</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {assignKitRows.map((row) => (
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.kitsDesired}</TableCell>
-                <TableCell><TextField label='Num Kits to Assign' /></TableCell>
+                <TableCell>ID</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Kits Desired</TableCell>
+                <TableCell>Num Kits to Assign</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
 
-        <Button size='large' color='primary' onClick={initAssignKits}>
-          Submit
-        </Button>
-      </FormContainer>
-    </Container>
+            <TableBody>
+              {assignKitRows.map((row) => (
+                <TableRow>
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.kitsDesired}</TableCell>
+                  <TableCell><TextField label='Num Kits to Assign' /></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
+          <Button size='large' color='primary' onClick={initAssignKits}>
+            Submit
+          </Button>
+        </FormContainer>
+      </Container>
+    :
+      <Login setLoggedIn={setLoggedIn} loading={loading} setLoading={setLoading} />
   )
 }
 
