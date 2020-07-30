@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { TextField, Button } from '@material-ui/core'
 import MenuItem from '@material-ui/core/MenuItem'
+import BeatLoader from 'react-spinners/BeatLoader'
 import './App.css'
 import Login from './Login'
 
@@ -11,7 +12,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 
-import { scheduleRounds, scheduleKitDates, assignKits } from './actions/AdminActions'
+import { scheduleRounds, scheduleKitDates, assignKits, getUnassignedUsers } from './actions/AdminActions'
 
 const Container = styled.div`
   display: flex;
@@ -42,14 +43,15 @@ const FormRow = styled.div`
   padding-bottom: 2%;
 `
 
+const LoadingForm = styled.div`
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+`
+
 const createRow = (id, name, kitsDesired) => {
   return { id, name, kitsDesired }
 }
-
-const assignKitRows = [
-  createRow(1, 'Asher Gilani', 200),
-  createRow(2, 'Mr Cool Guy', 10),
-]
 
 const counties = [
   'Morris', 'Bergen', 'Middlesex', 'Essex/Passaic Union'
@@ -58,6 +60,9 @@ const counties = [
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [unassignedLoading, setUnassignedLoading] = useState(false)
+
+  const [assignKitRows, setAssignKitRows] = useState([])
 
   const state = {
     scheduleRounds: { roundNum: useRef(), startDate: useRef(), endDate: useRef() },
@@ -92,6 +97,19 @@ const App = () => {
     console.log('assigning kits', JSON.stringify(state.assignKits))
     // assignKits()
   }
+
+  useEffect(() => {
+    // Load in unassigned constructors into the bottom table
+    if (loggedIn) {
+      setUnassignedLoading(true)
+
+      getUnassignedUsers().then((unassigned) => {
+        const newAssignKitRows = unassigned.map(user => createRow(user[0], user[1], user[2]))
+        setAssignKitRows(newAssignKitRows)
+        setUnassignedLoading(false)
+      })
+    }
+  }, [loggedIn])
 
   return (
     loggedIn ?
@@ -134,7 +152,14 @@ const App = () => {
         </FormContainer>
 
         <FormContainer>
-          <FormTitle>Assign Kits for Next Round</FormTitle>
+          <LoadingForm>
+            <FormTitle>Assign Kits for Next Round</FormTitle>
+            <BeatLoader
+              size={20}
+              color='#123abc'
+              loading={unassignedLoading}
+            />
+          </LoadingForm>
 
           <Table>
             <TableHead>

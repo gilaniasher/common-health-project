@@ -50,3 +50,20 @@ export const scheduleKitDates = ({ roundNum, county, kitDropoffDate, kitPickupDa
 export const assignKits = () => {
 
 }
+
+export const getUnassignedUsers = () => {
+    return fetch(`${endpoint}/GetUnassignedUsers`)
+        .then(res => res.json())
+        .then(json => {
+            return json.unassignedUsers
+        })
+        .catch(() => {
+            console.log('Failed to load in unassigned users')
+            // return []
+
+            return [
+                ["Hnscjs0jAkcuMfkLvyZS1OHGqrh2", "Test", 3],
+                ["36", "Test 2", 4]
+            ]
+        })
+}
