@@ -14,9 +14,6 @@ def get_db_secret():
         return 200, json.loads(secret)
 
 def lambda_handler(event, context):
-    # Load params
-    params = event['queryStringParameters']
-
     # Connect to DB
     status, secret = get_db_secret()
 
@@ -32,7 +29,7 @@ def lambda_handler(event, context):
     except Exception as e:
         return { 'statusCode': 500, 'body': json.dumps({ 'message': f'Failed to establish DB connection: {e}' }) }
 
-    # Get next round number (Figure out current round number and add 1)
+    # Figure out next round (get current round and add one)
     cur.execute('''
         SELECT round_number
         FROM rounds
@@ -41,27 +38,25 @@ def lambda_handler(event, context):
 
     next_round = cur.fetchone()[0] + 1
 
-    # Declare intent to sign up for certain number of kits (actual assignment happens in admin interface)
-    vals = (
-        params['uid'],
-        next_round,
-        int(params['numKits']) * 10
-    )
-
+    # Query for unassigned constructors
     cur.execute('''
-        INSERT INTO construct_intent (c_id, round_number, num_masks_desired)
-        VALUES (%s, %s, %s)
-    ''', vals)
+        SELECT c_id, name, num_masks_desired / 10 as num_kits_desired
+        FROM construct_intent INNER JOIN constructors ON c_id = id
+        WHERE round_number = %s
+    ''', (next_round,))
 
-    conn.commit()
+    unassigned_users = []
+
+    if (results := cur.fetchall()):
+        unassigned_users = results
 
     if conn is not None:
         cur.close()
         conn.close()
 
     return {
-        'statusCode': 200,
+        'statusCode': status,
         'body': json.dumps({
-            'message': f'Succesfully signed up for {params["numKits"]} kits'
-        }),
+            'unassignedUsers': unassigned_users
+        })
     }

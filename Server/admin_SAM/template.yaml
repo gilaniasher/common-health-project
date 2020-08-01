@@ -41,6 +41,30 @@ Resources:
           Properties:
             Path: /AdminLogin
             Method: post
+  GetUnassignedUsersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: get_unassigned_users/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        GetUnassignedUsers:
+          Type: Api
+          Properties:
+            Path: /GetUnassignedUsers
+            Method: get
+  AssignKitsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: assign_kits/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        AssignKits:
+          Type: Api
+          Properties:
+            Path: /AssignKits
+            Method: post
 Outputs:
   AddRoundApi:
     Description: API Gateway AddRound for CHP
@@ -69,3 +93,21 @@ Outputs:
   AdminLoginRequestIamRole:
     Description: Implicit IAM Role created for AdminLogin Request function
     Value: AdminLoginFunctionRole.Arn
+  GetUnassignedUsersApi:
+    Description: API Gateway GetUnassignedUsers for CHP
+    Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/GetUnassignedUsers
+  GetUnassignedUsersFunction:
+    Description: GetUnassignedUsers Lambda Function ARN
+    Value: GetUnassignedUsersFunction.Arn
+  GetUnassignedUsersRequestIamRole:
+    Description: Implicit IAM Role created for GetUnassignedUsers Request function
+    Value: GetUnassignedUsersFunctionRole.Arn
+  AssignKitsApi:
+    Description: API Gateway AssignKits for CHP
+    Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/AssignKits
+  AssignKitsFunction:
+    Description: AssignKits Lambda Function ARN
+    Value: AssignKitsFunction.Arn
+  AssignKitsRequestIamRole:
+    Description: Implicit IAM Role created for AssignKits Request function
+    Value: AssignKitsFunctionRole.Arn

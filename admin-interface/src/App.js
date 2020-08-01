@@ -61,13 +61,12 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [loading, setLoading] = useState(false)
   const [unassignedLoading, setUnassignedLoading] = useState(false)
-
   const [assignKitRows, setAssignKitRows] = useState([])
 
   const state = {
     scheduleRounds: { roundNum: useRef(), startDate: useRef(), endDate: useRef() },
     scheduleKitDates: { roundNum: useRef(), county: useRef(), kitDropoff: useRef(), kitPickup: useRef() },
-    assignKits: []
+    assignKits: {}
   }
 
   const initScheduleRounds = () => {
@@ -94,8 +93,20 @@ const App = () => {
   }
 
   const initAssignKits = () => {
-    console.log('assigning kits', JSON.stringify(state.assignKits))
-    // assignKits()
+    console.log('Assigning kits')
+    let params = {}
+
+    for (const id in state.assignKits) {
+      if (state.assignKits[id].value !== '') {
+        params[id] = state.assignKits[id].value + '0'
+      }
+    }
+
+    console.log(JSON.stringify(params, null, 2))
+
+    if (Object.keys(params).length !== 0) {
+      assignKits(params)
+    }
   }
 
   useEffect(() => {
@@ -105,6 +116,7 @@ const App = () => {
 
       getUnassignedUsers().then((unassigned) => {
         const newAssignKitRows = unassigned.map(user => createRow(user[0], user[1], user[2]))
+        state.assignKits = {}
         setAssignKitRows(newAssignKitRows)
         setUnassignedLoading(false)
       })
@@ -167,7 +179,7 @@ const App = () => {
                 <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Kits Desired</TableCell>
-                <TableCell>Num Kits to Assign</TableCell>
+                <TableCell>Num Kits to Assign (Entries can be left blank)</TableCell>
               </TableRow>
             </TableHead>
 
@@ -177,7 +189,7 @@ const App = () => {
                   <TableCell>{row.id}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.kitsDesired}</TableCell>
-                  <TableCell><TextField label='Num Kits to Assign' /></TableCell>
+                  <TableCell><TextField label='Num Kits to Assign' inputRef={(c) => { state.assignKits[row.id] = c }} /></TableCell>
                 </TableRow>
               ))}
             </TableBody>

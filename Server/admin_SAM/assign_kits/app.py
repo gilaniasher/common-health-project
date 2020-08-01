@@ -1,5 +1,6 @@
 import json
 import psycopg2
+from psycopg2.extras import execute_values
 import boto3
 
 def get_db_secret():
@@ -13,9 +14,9 @@ def get_db_secret():
     else:
         return 200, json.loads(secret)
 
+
 def lambda_handler(event, context):
-    # Load params
-    params = event['queryStringParameters']
+    kit_assignment = json.loads(event['body'])
 
     # Connect to DB
     status, secret = get_db_secret()
@@ -32,7 +33,7 @@ def lambda_handler(event, context):
     except Exception as e:
         return { 'statusCode': 500, 'body': json.dumps({ 'message': f'Failed to establish DB connection: {e}' }) }
 
-    # Get next round number (Figure out current round number and add 1)
+    # Figure out next round (get current round and add one)
     cur.execute('''
         SELECT round_number
         FROM rounds
@@ -41,17 +42,21 @@ def lambda_handler(event, context):
 
     next_round = cur.fetchone()[0] + 1
 
-    # Declare intent to sign up for certain number of kits (actual assignment happens in admin interface)
-    vals = (
-        params['uid'],
-        next_round,
-        int(params['numKits']) * 10
-    )
+    # Assign Kits (update rows in rounds_construct)
+    args_list = [(next_round, 0, 0, c_id, num_masks_assigned) for c_id, num_masks_assigned in kit_assignment.items()]
+
+    execute_values(cur, '''
+        INSERT INTO rounds_construct (round_number, num_masks_built, num_masks_broken, c_id, num_masks_assigned)
+        VALUES %s
+    ''', args_list)
+
+    # Remove these users from construct_intent
+    assigned_ids = tuple(c_id for c_id in kit_assignment)
 
     cur.execute('''
-        INSERT INTO construct_intent (c_id, round_number, num_masks_desired)
-        VALUES (%s, %s, %s)
-    ''', vals)
+        DELETE FROM construct_intent
+        WHERE round_number = %s AND c_id IN %s
+    ''', (next_round, assigned_ids))
 
     conn.commit()
 
@@ -61,7 +66,5 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
-        'body': json.dumps({
-            'message': f'Succesfully signed up for {params["numKits"]} kits'
-        }),
+        'body': json.dumps({ 'message': 'Succesfully assigned kits for next round' })
     }

@@ -47,8 +47,18 @@ export const scheduleKitDates = ({ roundNum, county, kitDropoffDate, kitPickupDa
         .catch(err => console.log(`Could not schedule dates: ${err}`))
 }
 
-export const assignKits = () => {
-
+export const assignKits = (kitAssignment) => {
+    fetch(`${endpoint}/AssignKits`, { method: 'POST', body: JSON.stringify(kitAssignment)})
+        .then((res) => {
+            if (res.status === 200) {
+                console.log('Succesfully updated kit assignment')
+            } else {
+                console.log('Failed to submit kit assignment')
+            }
+        })
+        .catch(() => {
+            console.log('Kit assignment request failed')
+        })
 }
 
 export const getUnassignedUsers = () => {
@@ -59,11 +69,6 @@ export const getUnassignedUsers = () => {
         })
         .catch(() => {
             console.log('Failed to load in unassigned users')
-            // return []
-
-            return [
-                ["Hnscjs0jAkcuMfkLvyZS1OHGqrh2", "Test", 3],
-                ["36", "Test 2", 4]
-            ]
+            return []
         })
 }
