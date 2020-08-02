@@ -23,6 +23,7 @@ export const kitSignup = (uid, numKits, changeState, changeDashboardState) => {
         .then((json) => {
             changeState('spinner', false)
             console.log(`${JSON.stringify(json)}`)
+            changeState('successMsg', 'Waitlisted! Check back in later for assignment')
         })
         .catch((err) => {
             changeState('spinner', false)

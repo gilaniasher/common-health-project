@@ -20,7 +20,7 @@ export default function Signup(props) {
         email: '',
         password: '',
         address: '',
-        county: '',
+        county: 'Morris',
         phone: '',
         spinner: false
     })

@@ -1,81 +1,97 @@
-import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import AppIntroSlider from 'react-native-app-intro-slider';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React from 'react'
+import { SafeAreaView, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import AppIntroSlider from 'react-native-app-intro-slider'
+import Icon from 'react-native-vector-icons/Ionicons'
+import Unorderedlist from 'react-native-unordered-list'
+
+import SerialSticker from './tutorial_images/serial_sticker.png'
+import RemoveAdhesive from './tutorial_images/remove_adhesive.png'
+import AttachFoam from './tutorial_images/attach_foam.png'
+import AttachStrap from './tutorial_images/attach_strap.png'
+import ShieldToBand from './tutorial_images/shield_to_band.png'
+import Bag from './tutorial_images/bag.png'
 
 const slides = [
-    {
-      key: 1,
-      title: '1: Clean Band',
-      text: '· Wipe both sides of band with paper towel and IPA solution\n· Orient band as pictured above\n· Attach serial number sticker as shown',
-      image: 'https://picsum.photos/seed/picsum/200/300?grayscale',
-      backgroundColor: '#59b2ab',
-    },
-    {
-      key: 2,
-      title: '2: Clean Band',
-      text: '· Remove backing from foam and attach to band as shown',
-      image: 'https://picsum.photos/seed/picsum/200/300?grayscale',
-      backgroundColor: '#59b2ab',
-    },
-    {
-      key: 3,
-      title: 'Attach Serial # Sticker',
-      text: '· Serial number stickers are in a sequential order and dated!\n· Please only use one sticker\n· If serial sticker is damaged, please alert staff!',
-      image: 'https://picsum.photos/seed/picsum/200/300?grayscale',
-      backgroundColor: '#59b2ab',
-    },
-    {
-      key: 4,
-      title: 'Attach Adhesive Foam',
-      text: '· Center adhesive strip between buckles\n· DO NOT center ahesive strip with \"shield band\"',
-      image: 'https://picsum.photos/seed/picsum1/200/300?grayscale',
-      backgroundColor: '#febe29',
-    },
-    {
-      key: 5,
-      title: 'Tip: Removing the Adhesive Foam Backing',
-      text: '· Place the exacto-knife as shown: Dull edge contacting where backing meets foam\n· Roll the knife away from you (as if you are rolling it away on a table)\n· The sharp edge will peel the foam from the backing',
-      image: 'https://picsum.photos/seed/picsum2/200/300?grayscale',
-      backgroundColor: '#22bcb5',
-    },
-    {
-      key: 6,
-      title: 'Attach the Strap',
-      text: '',
-      image: '',
-      backgroundColor: '#22bcb5',
-    },
-    {
-      key: 7,
-      title: '1: Clean Shield',
-      text: '· Wipe down PET shield with paper towel and IPA solution if it needs to be cleaned\n· Align clear shield slot over T-tab on white band (Images 1 & 2)',
-      image: '', 
-      backgroundColor: '',
-    },
-    {
-      key: 8,
-      title: '2: Clean Shield',
-      text: '· Use dowel pin to push white tab through clear shield slot\n· Fold tabs flat, trapping shield',
-      image: '',
-      backgroundColor: '',
-    },
-    {
-        key: 9,
-        title: 'Place Shield into Bag with Instructions',
-        text: '· Ensure Shield is clean and all previous steps have been completed\n· Slip instructions between shield and band\n· Slide both items into re-sealable bag and lay bag flat in cardboard box\n· 100 shields per box',
-        image: '',
-        backgroundColor: '',
-    },
-];
+  {
+    key: 1,
+    title: 'Attach Serial # Sticker to Band',
+    text: [
+      'The sticker goes on the front of the band',
+      'Please alert staff if sticker is damaged'
+    ],
+    image: SerialSticker
+  },
+  {
+    key: 2,
+    title: 'Remove Foam Adhesive',
+    text: [
+      'Use an exacto knife to peel away the foam adhesive',
+      'See construction tips for help on removing the foam adhesive'
+    ],
+    image: RemoveAdhesive
+  },
+  {
+    key: 3,
+    title: 'Attach Foam Strip',
+    text: [
+      'Foam strip goes on the back of the band',
+      'Center the foam between the buckles'
+    ],
+    image: AttachFoam,
+    style: { width: '96%', height: '40%' }
+  },
+  {
+    key: 4,
+    title: 'Attach Strap',
+    text: [
+      'Follow the images above to attach the strap',
+      'The full video tutorial may be helpful to see how to do this'
+    ],
+    image: AttachStrap
+  },
+  {
+    key: 5,
+    title: 'Attach PET Shield to Band',
+    text: [
+      'Align clear shield slot over T-tab on white band',
+      'Use dowel pin to push white tab through clear shield slot',
+      'Fold tabs flat, trapping shield'
+    ],
+    image: ShieldToBand,
+    style: { width: '96%', height: '35%' }
+  },
+  {
+    key: 6,
+    title: 'Place Shield into Bag with Instructions',
+    text: [
+      'Ensure shield is clean',
+      'Slide both the shield and instructions into the bag',
+      'Put all bags into the original bag that was given',
+      'Now complete the final quality checklist'
+    ],
+    image: Bag
+  },
+]
 
 export default function TutorialSteps(props) {
     const renderItem = ({ item }) => {
         return (
             <View style={styles.slide}>
                 <Text style={styles.title}>{item.title}</Text>
-                <Image source={item.image} style={styles.image} />
-                <Text style={styles.text}>{item.text}</Text>
+
+                { (item.width && item.height) ?
+                    <Image source={item.image} style={[styles.image, {width: item.width, height: item.height}]} />
+                  :
+                    <Image source={item.image} style={styles.image} />
+                }
+
+                <View style={{width: '100%', paddingHorizontal: '5%', flex: 0.7, justifyContent: 'center'}}>
+                  {item.text.map(line =>
+                    <Unorderedlist style={{fontSize: 20}}>
+                      <Text style={styles.text}>{line}</Text>
+                    </Unorderedlist>
+                  )}
+                </View>
             </View>
         )
     }
@@ -86,7 +102,7 @@ export default function TutorialSteps(props) {
                 <TouchableOpacity onPress={() => props.navigation.goBack()} style={styles.backButton}>
                     <Icon name='ios-arrow-back' size={28} color='white' />
                 </TouchableOpacity>
-                <Text style={styles.headerText}>Kit Confirmation</Text>
+                <Text style={styles.headerText}>Tutorial Steps</Text>
             </View>
 
             <View style={styles.bottomContainer}>
@@ -97,7 +113,7 @@ export default function TutorialSteps(props) {
                 />
             </View>
         </SafeAreaView>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -106,23 +122,22 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       paddingVertical: 20,
       backgroundColor: 'rgba(44, 130, 201, 0.5)',
+      height: '100%'
     },
     image: {
-      width: 225,
-      height: 225,
-      marginVertical: 32,
+      width: '96%',
+      height: '50%',
+      marginVertical: '5%',
       borderWidth: 1,
       borderColor: 'black'
     },
     text: {
-      color: 'rgba(0, 0, 0, 0.8)',
-      marginBottom: 5,
-      fontSize: 15,
-      paddingHorizontal: 20
+      fontSize: 16,
+      marginTop: '1%'
     },
     title: {
       fontSize: 22,
-      color: 'black',
+      fontWeight: 'bold',
       textAlign: 'center',
     },
     container: {
@@ -147,4 +162,4 @@ const styles = StyleSheet.create({
     bottomContainer: {
         flex: 9.5,
     }
-  });
+  })

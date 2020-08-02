@@ -16,7 +16,8 @@ export default function OptModal(props) {
         numKits: 0,
         spinner: false,
         invalidRef: React.createRef(),
-        signupError: ''
+        signupError: '',
+        successMsg: ''
     })
 
     const changeState = (id, val) => {
@@ -36,7 +37,7 @@ export default function OptModal(props) {
             .signOut()
             .then(() => {
                 console.log('User signed out')
-                props.navigation.navigate('Login')
+                props.navigation.navigate('Entry')
             })
     }
 
@@ -46,6 +47,13 @@ export default function OptModal(props) {
             changeState('signupError', '')
         }
     }, [state.signupError])
+
+    useEffect(() => {
+        if (state.successMsg !== '') {
+            state.invalidRef.alertWithType('info', state.successMsg);
+            changeState('successMsg', '')
+        }
+    }, [state.successMsg])
 
     return (
         <Modal
@@ -63,7 +71,11 @@ export default function OptModal(props) {
                         </TouchableOpacity>
                     </View>
                     <View style={{flex: 9.5, alignItems: 'center'}}>
-                        <Text style={styles.formText}>How many face shield kits do you want delivered?{'\n\n'}(1 kit = 10 shields)</Text>
+                        <Text style={styles.formText}>
+                            How many face shield kits do you want to waitlist for?{'\n\n'}
+                            (1 kit = 10 shields)
+                        </Text>
+
                         <NumericInput
                             type='up-down'
                             onChange={value => changeState('numKits', value)}
@@ -75,6 +87,7 @@ export default function OptModal(props) {
                             totalWidth={width * 0.7}
                             totalHeight={height * 0.15}
                         />
+
                         {state.numKits != 0 &&
                             <AwesomeButtonRick
                                 type='anchor'
@@ -85,9 +98,10 @@ export default function OptModal(props) {
                                 backgroundDarker={'#003366'}
                                 style={styles.kitButton}
                             >
-                                Sign Up for Kits
+                                Get on Kit Waitlist!
                             </AwesomeButtonRick>
                         }
+
                         {state.spinner && 
                             <ActivityIndicator style={styles.spinner} size='large' color='#FFFFFF' />
                         }
@@ -134,7 +148,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'flex-start',
-        marginBottom: '18%'
+        marginBottom: '10%'
     },
     backButton: {
         color: 'white',
