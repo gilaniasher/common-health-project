@@ -1,6 +1,6 @@
 import { getDashboardInfo } from '../actions/UserInfo'
 
-const endpoint = 'http://10.0.2.2:3000'
+const endpoint = 'https://otat5bn84l.execute-api.us-east-2.amazonaws.com/Prod'
 
 export const kitSignup = (uid, numKits, changeState, changeDashboardState) => {
     console.log('Backend kit signup')
