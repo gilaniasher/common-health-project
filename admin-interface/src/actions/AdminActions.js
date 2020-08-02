@@ -1,4 +1,4 @@
-const endpoint = 'http://127.0.0.1:3002'
+const endpoint = 'https://obxbkf8dsb.execute-api.us-east-2.amazonaws.com/Prod'
 
 export const login = (username, password, setLoggedIn, setLoading) => {
     const url = `${endpoint}/AdminLogin?` + new URLSearchParams({ username, password })

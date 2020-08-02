@@ -90,16 +90,17 @@ def lambda_handler(event, context):
     status, msg = add_dates_db(params['county'], notif_title, notif_body)
 
     if status != 200:
-        return { 'statusCode': 500, 'body': json.dumps({ 'message': msg }) }
+        return { 'statusCode': 500, 'headers': { "Access-Control-Allow-Origin" : "*" }, 'body': json.dumps({ 'message': msg }) }
 
     # Send out Firebase notifications
     status, msg = send_county_notification(notif_title, notif_body, params['county'])
 
     if status != 200:
-        return { 'statusCode': 500, 'body': json.dumps({ 'message': msg }) }
+        return { 'statusCode': 500, 'headers': { "Access-Control-Allow-Origin" : "*" }, 'body': json.dumps({ 'message': msg }) }
 
     return {
         'statusCode': 200,
+        'headers': { "Access-Control-Allow-Origin" : "*" },
         'body': json.dumps({
             'message': 'Dates scheduled succesfully'
         }),

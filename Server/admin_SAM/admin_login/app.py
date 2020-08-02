@@ -18,9 +18,9 @@ def lambda_handler(event, context):
     status, creds = get_admin_secret()
 
     if status != 200:
-        return { 'statusCode': 500, 'body': json.dumps({ 'message': 'Could not retrieve Admin Credentials' }) }
+        return { 'statusCode': 500, 'headers': { "Access-Control-Allow-Origin" : "*" }, 'body': json.dumps({ 'message': 'Could not retrieve Admin Credentials' }) }
 
     if params['username'] == creds['adminUser'] and params['password'] == creds['adminPassword']:
-        return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Login Succesful' }) }
+        return { 'statusCode': 200, 'headers': { "Access-Control-Allow-Origin" : "*" }, 'body': json.dumps({ 'message': 'Login Succesful' }) }
     else:
-        return { 'statusCode': 401, 'body': json.dumps({ 'message': 'Invalid Credentials' }) }
+        return { 'statusCode': 401, 'headers': { "Access-Control-Allow-Origin" : "*" }, 'body': json.dumps({ 'message': 'Invalid Credentials' }) }

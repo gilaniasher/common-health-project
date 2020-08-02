@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     status, secret = get_db_secret()
 
     if status == 500:
-        return { 'statusCode': 500, 'body': json.dumps({ 'message': 'Unable to get DB secret' }) }
+        return { 'statusCode': 500, 'headers': { "Access-Control-Allow-Origin" : "*" }, 'body': json.dumps({ 'message': 'Unable to get DB secret' }) }
 
     conn = None
     cur = None
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
         conn = psycopg2.connect(host=secret['host'], database=secret['dbname'], user=secret['username'], password=secret['password'])
         cur = conn.cursor()
     except Exception as e:
-        return { 'statusCode': 500, 'body': json.dumps({ 'message': f'Failed to establish DB connection: {e}' }) }
+        return { 'statusCode': 500, 'headers': { "Access-Control-Allow-Origin" : "*" }, 'body': json.dumps({ 'message': f'Failed to establish DB connection: {e}' }) }
 
     # Figure out next round (get current round and add one)
     cur.execute('''
@@ -56,6 +56,7 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': status,
+        'headers': { "Access-Control-Allow-Origin" : "*" },
         'body': json.dumps({
             'unassignedUsers': unassigned_users
         })
