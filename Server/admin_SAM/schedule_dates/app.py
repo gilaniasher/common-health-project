@@ -1,6 +1,7 @@
 import json
 import psycopg2
 import boto3
+import firebase_admin
 from firebase_admin import messaging, credentials, initialize_app
 
 def get_db_secret():
@@ -63,13 +64,14 @@ def add_dates_db(county, notif_title, notif_body):
     return 200, ''
 
 def send_county_notification(notif_title, notif_body, county):
-    status, fcm_secret = get_firebase_secret()
+    if not firebase_admin._apps:
+        status, fcm_secret = get_firebase_secret()
 
-    if status == 500:
-        return 500, 'Unable to get Firebase secret'
+        if status == 500:
+            return 500, 'Unable to get Firebase secret'
 
-    creds = credentials.Certificate(fcm_secret)
-    initialize_app(creds)
+        creds = credentials.Certificate(fcm_secret)
+        initialize_app(creds)
 
     messaging.send(messaging.Message(
         notification=messaging.Notification(

@@ -43,7 +43,6 @@ export default function Signup(props) {
         }, props.navigation, changeState)
 
         const fcmToken = await messaging().getToken()
-
         subscribeToTopic(fcmToken, state.county)
     }
 

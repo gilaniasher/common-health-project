@@ -1,5 +1,6 @@
 import json
 import boto3
+import firebase_admin
 from firebase_admin import messaging, credentials, initialize_app
 
 def get_firebase_secret():
@@ -21,11 +22,11 @@ def lambda_handler(event, context):
     if status == 500:
         return { 'statusCode': 500, 'body': json.dumps({ 'message': 'Unable to get Firebase secret' }) }
 
-    creds = credentials.Certificate(fcm_secret)
-    initialize_app(creds)
+    if not firebase_admin._apps:
+        creds = credentials.Certificate(fcm_secret)
+        initialize_app(creds)
 
-    reg_tokens = [params['regToken']]
-    res = messaging.subscribe_to_topic(reg_tokens, params['county'])
+    res = messaging.subscribe_to_topic(params['regToken'], params['county'])
 
     if res.success_count > 0:
         return { 'statusCode': 200, 'body': json.dumps({ 'message': 'User subscribed to notification topic' }) }

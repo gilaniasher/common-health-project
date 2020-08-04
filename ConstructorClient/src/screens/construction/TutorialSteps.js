@@ -25,7 +25,7 @@ const slides = [
     key: 2,
     title: 'Remove Foam Adhesive',
     text: [
-      'Use an exacto knife to peel away the foam adhesive',
+      'Use an exacto/butter knife to peel away the foam adhesive',
       'See construction tips for help on removing the foam adhesive'
     ],
     image: RemoveAdhesive

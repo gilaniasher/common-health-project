@@ -6,6 +6,7 @@ import OptModal from '../components/OptModal'
 import messaging from '@react-native-firebase/messaging'
 import DropDownHolder from '../components/DropDownHolder'
 import { NotificationArea } from './Notifications'
+import { subscribeToTopic } from '../actions/SubscribeToTopic'
 
 export default function Dashboard(props) {
     const userContext = useContext(UserContext)
@@ -17,6 +18,7 @@ export default function Dashboard(props) {
         builtShields: 0,
         brokenShields: 0,
         optedOut: true,
+        county: '',
         notifications: []        
     })
 
@@ -27,14 +29,11 @@ export default function Dashboard(props) {
         }))
     }
 
-    const getFcmToken = async () => {
+    const initTopicSubscription = async () => {
         const fcmToken = await messaging().getToken()
-
-        if (fcmToken) {
-            console.log('FCM token:', fcmToken)
-        } else {
-            console.log('Failed', 'No token received')
-        }
+        console.log('fcm token: ', fcmToken)
+        console.log('county: ', state.county)
+        subscribeToTopic(fcmToken, state.county)
     }
 
     const requestUserPermission = async () => {
@@ -42,7 +41,6 @@ export default function Dashboard(props) {
         const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL
 
         if (enabled) {
-            getFcmToken()
             console.log('Authorization status:', authStatus)
         }
     }
@@ -57,16 +55,22 @@ export default function Dashboard(props) {
         changeState('builtShields', userContext.numMasksBuilt)
         changeState('brokenShields', userContext.numMasksBroken)
         changeState('notifications', userContext.notifications)
-    }, [])
+        changeState('county', userContext.county)
 
-    useEffect(() => {
         requestUserPermission()
+
         const unsubscribe = messaging().onMessage(async remoteMessage => {
             console.log('FCM Notification: ', JSON.stringify(remoteMessage))
             DropDownHolder.dropDown.alertWithType('info', remoteMessage.notification.title, remoteMessage.notification.body)
         })
+
         return unsubscribe
     }, [])
+
+    useEffect(() => {
+        if (state.county !== '')
+            initTopicSubscription()
+    }, [state.county])
 
     return (
         <>
