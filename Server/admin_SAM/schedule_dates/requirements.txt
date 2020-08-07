@@ -1,4 +1,0 @@
-aws-psycopg2
-boto3
-firebase-admin
-grpcio==1.26.0rc1

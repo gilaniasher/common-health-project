@@ -1,2 +1,0 @@
-aws-psycopg2
-boto3

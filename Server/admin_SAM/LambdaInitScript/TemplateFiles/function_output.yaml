@@ -1,9 +1,0 @@
-AuthenticateUserApi:
-  Description: API Gateway AuthenticateUser for CHP
-  Value: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/AuthenticateUser
-AuthenticateUserFunction:
-  Description: AuthenticateUser Lambda Function ARN
-  Value: AuthenticateUserFunction.Arn
-AuthenticateUserRequestIamRole:
-  Description: Implicit IAM Role created for AuthenticateUser Request function
-  Value: AuthenticateUserFunctionRole.Arn
