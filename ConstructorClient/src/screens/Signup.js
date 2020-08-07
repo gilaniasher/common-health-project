@@ -9,7 +9,7 @@ import { subscribeToTopic } from '../actions/SubscribeToTopic'
 import { Picker } from '@react-native-community/picker'
 
 const counties = [
-    'Morris', 'Bergen', 'Middlesex', 'Essex/Passaic Union'
+    'Morris', 'Bergen', 'Middlesex', 'Essex/Passaic', 'Union'
 ]
 
 export default function Signup(props) {

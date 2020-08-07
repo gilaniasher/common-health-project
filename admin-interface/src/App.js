@@ -54,7 +54,7 @@ const createRow = (id, name, kitsDesired) => {
 }
 
 const counties = [
-  'Morris', 'Bergen', 'Middlesex', 'Essex/Passaic Union'
+  'Morris', 'Bergen', 'Middlesex', 'Essex/Passaic', 'Union'
 ]
 
 const App = () => {

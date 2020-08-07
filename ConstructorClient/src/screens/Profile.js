@@ -87,10 +87,16 @@ export default function Profile(props) {
                     </View>
                 </View>
 
-                <View style={{flex: 1, marginTop: '15%'}}>
-                    <TouchableOpacity style={styles.buttonContainer} onPress={() => Linking.openURL('mailto:gilaniasher@gmail.com')}>
+                <View style={{flex: 1, marginTop: '15%', marginBottom: '10%'}}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={() => Linking.openURL('mailto:gilaniasher@gmail.com?subject=[CHP Tech] Help!')}>
 						<Text style={{ color: '#666666', fontSize: 24 }}>
-							Problems? Email Us!
+							Tech Problems?
+            			</Text>
+					</TouchableOpacity>
+
+                    <TouchableOpacity style={styles.buttonContainer} onPress={() => Linking.openURL('mailto:gilaniasher@gmail.com?subject=[CHP Logistics] Help!')}>
+						<Text style={{ color: '#666666', fontSize: 24 }}>
+							Other Problems?
             			</Text>
 					</TouchableOpacity>
                 </View>
@@ -177,9 +183,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
         borderColor: '#666666',
+        marginBottom: '3%',
         borderRadius: 15,
         borderWidth: 1.5,
-        padding: 10,
-        paddingHorizontal: '10%'
+        paddingHorizontal: '15%'
 	},
 })

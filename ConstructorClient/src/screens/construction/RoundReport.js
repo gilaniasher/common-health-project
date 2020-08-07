@@ -45,7 +45,7 @@ export default function RoundReport(props) {
 
             <View style={styles.bottomContainer}>
                 <WebView 
-                    source={{ uri: 'https://docs.google.com/forms/d/e/1FAIpQLSf5LGE7VJaBuyjoUhKSp8Oiw2fvcqWKjPut6yWVXx_notv7Tw/closedform' }}
+                    source={{ uri: 'https://docs.google.com/forms/d/e/1FAIpQLSdGeZ-usyxCw7wm2wAp8j3-eyElv1pm5apYlo9cAyAxRsVqMg/viewform' }}
                 />
 
                 <AwesomeButtonRick 
