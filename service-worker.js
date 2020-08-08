@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/common-health-project/precache-manifest.f1617f61faaf14233cb691f5ef80cf2b.js"
+  "/common-health-project/precache-manifest.3ef964fd611c4d8ccdcc546a82f1cc3e.js"
 );
 
 self.addEventListener('message', (event) => {
