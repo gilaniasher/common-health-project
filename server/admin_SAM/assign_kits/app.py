@@ -17,6 +17,7 @@ def get_db_secret():
 
 def lambda_handler(event, context):
     kit_assignment = json.loads(event['body'])
+    round_num = event['queryStringParameters']['roundNumber']
 
     # Connect to DB
     status, secret = get_db_secret()
@@ -33,14 +34,17 @@ def lambda_handler(event, context):
     except Exception as e:
         return { 'statusCode': 500, 'headers': { "Access-Control-Allow-Origin" : "*" }, 'body': json.dumps({ 'message': f'Failed to establish DB connection: {e}' }) }
 
-    # Figure out next round (get current round and add one)
-    cur.execute('''
-        SELECT round_number
-        FROM rounds
-        WHERE start_date <= (SELECT CURRENT_DATE) AND (SELECT CURRENT_DATE) <= end_date
-    ''')
+    if round_num == '':
+        # Figure out next round (get current round and add one)
+        cur.execute('''
+            SELECT round_number
+            FROM rounds
+            WHERE start_date <= (SELECT CURRENT_DATE) AND (SELECT CURRENT_DATE) <= end_date
+        ''')
 
-    next_round = cur.fetchone()[0] + 1
+        next_round = cur.fetchone()[0] + 1
+    else:
+        next_round = round_num
 
     # Assign Kits (update rows in rounds_construct)
     args_list = [(next_round, 0, 0, c_id, num_masks_assigned) for c_id, num_masks_assigned in kit_assignment.items()]

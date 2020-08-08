@@ -47,8 +47,10 @@ export const scheduleKitDates = ({ roundNum, county, kitDropoffDate, kitPickupDa
         .catch(err => console.log(`Could not schedule dates: ${err}`))
 }
 
-export const assignKits = (kitAssignment) => {
-    fetch(`${endpoint}/AssignKits`, { method: 'POST', body: JSON.stringify(kitAssignment)})
+export const assignKits = (kitAssignment, roundNumber) => {
+    const url = `${endpoint}/AssignKits?` + new URLSearchParams({ roundNumber })
+
+    return fetch(url, { method: 'POST', body: JSON.stringify(kitAssignment)})
         .then((res) => {
             if (res.status === 200) {
                 console.log('Succesfully updated kit assignment')
@@ -61,8 +63,10 @@ export const assignKits = (kitAssignment) => {
         })
 }
 
-export const getUnassignedUsers = () => {
-    return fetch(`${endpoint}/GetUnassignedUsers`)
+export const getUnassignedUsers = (roundNumber) => {
+    const url = `${endpoint}/GetUnassignedUsers?` + new URLSearchParams({ roundNumber })
+
+    return fetch(url)
         .then(res => res.json())
         .then(json => {
             return json.unassignedUsers

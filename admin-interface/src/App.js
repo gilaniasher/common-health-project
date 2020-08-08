@@ -66,6 +66,7 @@ const App = () => {
   const state = {
     scheduleRounds: { roundNum: useRef(), startDate: useRef(), endDate: useRef() },
     scheduleKitDates: { roundNum: useRef(), county: useRef(), kitDropoff: useRef(), kitPickup: useRef() },
+    assignmentRoundNum: useRef(''),
     assignKits: {}
   }
 
@@ -94,7 +95,11 @@ const App = () => {
 
   const initAssignKits = () => {
     console.log('Assigning kits')
+    let roundNum = ''
     let params = {}
+
+    if (state.assignmentRoundNum.current !== '')
+      roundNum = state.assignmentRoundNum.current.value
 
     for (const id in state.assignKits) {
       if (state.assignKits[id].value !== '') {
@@ -105,21 +110,31 @@ const App = () => {
     console.log(JSON.stringify(params, null, 2))
 
     if (Object.keys(params).length !== 0) {
-      assignKits(params)
+      assignKits(params, roundNum).then(() => {
+        initGetUnassignedUsers()
+      })
     }
+  }
+
+  const initGetUnassignedUsers = () => {
+    setUnassignedLoading(true)
+    let roundNum = ''
+
+    if (state.assignmentRoundNum.current !== '')
+      roundNum = state.assignmentRoundNum.current.value
+
+    getUnassignedUsers(roundNum).then((unassigned) => {
+      const newAssignKitRows = unassigned.map(user => createRow(user[0], user[1], user[2]))
+      state.assignKits = {}
+      setAssignKitRows(newAssignKitRows)
+      setUnassignedLoading(false)
+    })
   }
 
   useEffect(() => {
     // Load in unassigned constructors into the bottom table
     if (loggedIn) {
-      setUnassignedLoading(true)
-
-      getUnassignedUsers().then((unassigned) => {
-        const newAssignKitRows = unassigned.map(user => createRow(user[0], user[1], user[2]))
-        state.assignKits = {}
-        setAssignKitRows(newAssignKitRows)
-        setUnassignedLoading(false)
-      })
+      initGetUnassignedUsers()
     }
   }, [loggedIn])
 
@@ -165,7 +180,9 @@ const App = () => {
 
         <FormContainer>
           <LoadingForm>
-            <FormTitle>Assign Kits for Next Round</FormTitle>
+            <FormTitle>Assign Kits for Round</FormTitle>
+            <TextField label='Round Number' inputRef={state.assignmentRoundNum} style={{ marginLeft: '2%', marginTop: '-1.5%' }} />
+            <Button size='large' color='primary' onClick={initGetUnassignedUsers}>Go</Button>
             <BeatLoader
               size={20}
               color='#123abc'
