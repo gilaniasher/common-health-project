@@ -33,29 +33,6 @@ def lambda_handler(event, context):
     except Exception as e:
         return { 'statusCode': 500, 'body': json.dumps({ 'message': f'Failed to establish DB connection: {e}' }) }
 
-    # Figure out current round
-    cur.execute('''
-        SELECT round_number
-        FROM rounds
-        WHERE start_date <= (SELECT CURRENT_DATE) AND (SELECT CURRENT_DATE) <= end_date
-    ''')
-
-    round_number = cur.fetchone()[0]
-
-    # Query rounds_construct for num_masks_assigned, built, broken/ opted out
-    cur.execute('''
-        SELECT num_masks_built, num_masks_broken, num_masks_assigned
-        FROM rounds_construct
-        WHERE c_id = %s AND round_number = %s
-    ''', (uid, round_number))
-
-    if (vals := cur.fetchone()) is None:
-        opted_out = True
-        num_masks_built, num_masks_broken, num_masks_assigned = (0, 0, 0)
-    else:
-        opted_out = False
-        num_masks_built, num_masks_broken, num_masks_assigned = vals
-
     # Query for name
     cur.execute('''
         SELECT name, num_masks_built, county
@@ -80,6 +57,63 @@ def lambda_handler(event, context):
         for time, title, body in results:
             notifications.append((time.strftime('%m/%d/%Y, %-I:%M%p'), title, body))
 
+    # Figure out current round
+    cur.execute('''
+        SELECT round_number
+        FROM rounds
+        WHERE start_date <= (SELECT CURRENT_DATE) AND (SELECT CURRENT_DATE) <= end_date
+    ''')
+
+    round_number = cur.fetchone()
+
+    if round_number is None:
+        # No round currently in session
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'name': name,
+                'currentRound': -1,
+                'optedOut' : True,
+                'numMasksAssigned': -1,
+                'numMasksBuilt': -1,
+                'numMasksBroken': -1,
+                'notifications': notifications,
+                'totalMasksBuilt': total_masks_built,
+                'county': county
+            })
+        }
+
+    round_number = round_number[0]
+
+    # Query rounds_construct for num_masks_assigned, built, broken/ opted out
+    cur.execute('''
+        SELECT num_masks_built, num_masks_broken, num_masks_assigned
+        FROM rounds_construct
+        WHERE c_id = %s AND round_number = %s
+    ''', (uid, round_number))
+
+    if (vals := cur.fetchone()) is None:
+        opted_out = True
+        num_masks_built, num_masks_broken = 0, 0
+
+        # Check if user is waitlisted for current round
+        cur.execute('''
+            SELECT num_masks_desired
+            FROM construct_intent
+            WHERE c_id = %s AND round_number = %s
+        ''', (uid, round_number))
+
+        if (waitlist_vals := cur.fetchone()):
+            waitlisted = True
+            num_masks_assigned = waitlist_vals[0]
+        else:
+            waitlisted = False
+            num_masks_assigned = 0
+    else:
+        opted_out = False
+        waitlisted = False
+        num_masks_built, num_masks_broken, num_masks_assigned = vals
+
     if conn is not None:
         cur.close()
         conn.close()
@@ -95,6 +129,7 @@ def lambda_handler(event, context):
             'numMasksBroken': num_masks_broken,
             'notifications': notifications,
             'totalMasksBuilt': total_masks_built,
-            'county': county
-        }),
+            'county': county,
+            'waitlisted': waitlisted
+        })
     }

@@ -1,11 +1,16 @@
 import { getDashboardInfo } from '../actions/UserInfo'
 
-const endpoint = 'https://otat5bn84l.execute-api.us-east-2.amazonaws.com/Prod'
+const endpoint = 'https://uagvmuj2b3.execute-api.us-east-2.amazonaws.com/Prod'
 
-export const kitSignup = (uid, numKits, changeState, changeDashboardState) => {
+export const kitSignup = (uid, numKits, nextRound, changeState, changeDashboardState) => {
     console.log('Backend kit signup')
+
+    if (!nextRound) {
+        // For python backend, an empty string will be treated as false
+        nextRound = ''
+    }
     
-    const url = `${endpoint}/KitSignup?` + new URLSearchParams({ uid, numKits })
+    const url = `${endpoint}/KitSignup?` + new URLSearchParams({ uid, numKits, nextRound })
 
     // Create user in our own custom RDS database
     fetch(url, { method: 'POST' })

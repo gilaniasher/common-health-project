@@ -38,19 +38,18 @@ export default function Login(props) {
 
         if (valid) {
             auth()
-                .signInWithEmailAndPassword(state.email, state.password)
+                .signInWithEmailAndPassword(state.email.trim().toLowerCase(), state.password.trim())
                 .catch(error => {
                     changeState('spinner', false);
                     if (error.code === 'auth/invalid-email') {
                         changeState('firebaseError', 'Invalid Credentials')
                     } else if (error.code === 'auth/user-disabled') {
-                        changeState('firebaseError', 'Account has been disabled, contact an admin')
+                        changeState('firebaseError', 'Account has been disabled, contact an admin.')
                     } else if (error.code === 'auth/user-not-found') {
-                        changeState('firebaseError', 'Invalid Credentials')
+                        changeState('firebaseError', 'Account not found. Please contact an admin if this is a mistake.')
                     } else if (error.code === 'auth/wrong-password') {
                         changeState('firebaseError', 'Invalid Credentials')
                     }
-
                 })
         }
     }

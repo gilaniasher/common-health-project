@@ -34,12 +34,12 @@ export default function Signup(props) {
 
     const initSignup = async () => {
         signup({
-            name: `${state.firstname} ${state.lastname}`,
-            email: state.email,
-            address: state.address,
-            county: state.county,
-            phone: state.phone,
-            password: state.password
+            name: `${state.firstname} ${state.lastname}`.trim(),
+            email: state.email.trim().toLowerCase(),
+            address: state.address.trim(),
+            county: state.county.trim(),
+            phone: state.phone.trim(),
+            password: state.password.trim()
         }, props.navigation, changeState)
 
         const fcmToken = await messaging().getToken()

@@ -6,6 +6,7 @@ import { kitSignup } from '../actions/KitSignup'
 import DropdownAlert from 'react-native-dropdownalert'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import auth from '@react-native-firebase/auth'
+import { Picker } from '@react-native-community/picker'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -17,7 +18,8 @@ export default function OptModal(props) {
         spinner: false,
         invalidRef: React.createRef(),
         signupError: '',
-        successMsg: ''
+        successMsg: '',
+        nextRound: false
     })
 
     const changeState = (id, val) => {
@@ -29,7 +31,7 @@ export default function OptModal(props) {
 
     const initKitSignup = () => {
         changeState('spinner', true)
-        kitSignup(props.uid, state.numKits, changeState, props.changeDashboardState)
+        kitSignup(props.uid, state.numKits, state.nextRound, changeState, props.changeDashboardState)
     }
 
     const signout = () => {
@@ -85,8 +87,19 @@ export default function OptModal(props) {
                             editable={false}
                             textColor='white'
                             totalWidth={width * 0.7}
-                            totalHeight={height * 0.15}
+                            totalHeight={height * 0.13}
                         />
+
+                        <View style={styles.roundPicker}>
+                            <Picker
+                                selectedValue={state.nextRound}
+                                onValueChange={val => changeState('nextRound', val)}
+                                style={{ color: '#FFFFFF' }}
+                            >
+                                <Picker.Item label={'Current Round'} value={false} />
+                                <Picker.Item label={'Next Round'} value={true} />
+                            </Picker>
+                        </View>
 
                         {state.numKits != 0 &&
                             <AwesomeButtonRick
@@ -109,19 +122,27 @@ export default function OptModal(props) {
                 </View>
                 :
                 <View style={styles.centeredView}>
-                    <Text style={styles.modalHeader}>You have currently opted out from building</Text>
-                    <AwesomeButtonRick
-                        type='anchor'
-                        onPress={() => setFormVisible(true)}
-                        borderRadius={15}
-                        stretch={true}
-                        backgroundColor={'#003366'}
-                        backgroundDarker={'#003366'}
-                    >
-                        Opt In for Next Round
-                    </AwesomeButtonRick>
-
-                    <Text style={{marginTop: '10%', color: 'white', fontSize: 20}}>Or</Text>
+                    {props.error !== '' ?
+                        <Text style={styles.modalHeader}>{props.error}</Text>
+                        :
+                        <Text style={styles.modalHeader}>You have currently opted out from building</Text>
+                    }
+                    
+                    {props.error === '' &&
+                        <>
+                            <AwesomeButtonRick
+                                type='anchor'
+                                onPress={() => setFormVisible(true)}
+                                borderRadius={15}
+                                stretch={true}
+                                backgroundColor={'#003366'}
+                                backgroundDarker={'#003366'}
+                            >
+                                Opt In for Next Round
+                            </AwesomeButtonRick>
+                            <Text style={{marginTop: '10%', color: 'white', fontSize: 20}}>Or</Text>
+                        </>
+                    }
 
                     <TouchableOpacity style={styles.signoutOpacity} onPress={signout}>
                         <Icon name='sign-out' color='white' size={25} />
@@ -161,13 +182,13 @@ const styles = StyleSheet.create({
         padding: '7%'
     },
     kitButton: {
-        marginTop: '20%'
+        marginTop: '1%'
     },
     formText: {
         fontSize: 25,
         color: 'white',
         textAlign: 'center',
-        paddingBottom: '20%'
+        paddingBottom: '10%'
     },
     modalHeader: {
         color: 'white',
@@ -184,5 +205,14 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 15,
         marginLeft: '2%'
+    },
+    roundPicker: {
+        borderColor: 'white',
+        borderRadius: 200,
+        borderWidth: 1,
+        height: '10%',
+        width: '90%',
+        marginVertical: '10%',
+        paddingHorizontal: '5%'
     }
 })

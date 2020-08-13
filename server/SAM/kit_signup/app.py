@@ -32,19 +32,22 @@ def lambda_handler(event, context):
     except Exception as e:
         return { 'statusCode': 500, 'body': json.dumps({ 'message': f'Failed to establish DB connection: {e}' }) }
 
-    # Get next round number (Figure out current round number and add 1)
+    # Get current round number
     cur.execute('''
         SELECT round_number
         FROM rounds
         WHERE start_date <= (SELECT CURRENT_DATE) AND (SELECT CURRENT_DATE) <= end_date
     ''')
 
-    next_round = cur.fetchone()[0] + 1
+    if params['nextRound']:
+        round_number = cur.fetchone()[0] + 1
+    else:
+        round_number = cur.fetchone()[0]
 
     # Declare intent to sign up for certain number of kits (actual assignment happens in admin interface)
     vals = (
         params['uid'],
-        next_round,
+        round_number,
         int(params['numKits']) * 10
     )
 

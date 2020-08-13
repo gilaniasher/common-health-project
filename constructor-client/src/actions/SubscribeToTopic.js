@@ -1,4 +1,4 @@
-const endpoint = 'https://otat5bn84l.execute-api.us-east-2.amazonaws.com/Prod'
+const endpoint = 'https://uagvmuj2b3.execute-api.us-east-2.amazonaws.com/Prod'
 
 export const subscribeToTopic = (regToken, county) => {
     console.log('Subscribing to notification topic')

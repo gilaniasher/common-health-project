@@ -1,4 +1,4 @@
-const endpoint = 'https://otat5bn84l.execute-api.us-east-2.amazonaws.com/Prod'
+const endpoint = 'https://uagvmuj2b3.execute-api.us-east-2.amazonaws.com/Prod'
 
 export const submitKits = (uid, numShieldsBuilt, changeState, navigation) => {
     console.log('Submitting Shields')

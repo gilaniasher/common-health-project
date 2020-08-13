@@ -10,6 +10,7 @@ import { subscribeToTopic } from '../actions/SubscribeToTopic'
 
 export default function Dashboard(props) {
     const userContext = useContext(UserContext)
+    const [modalError, setModalError] = useState('')
     const [state, setState] = useState({
         uid: -1,
         name: '',
@@ -18,8 +19,9 @@ export default function Dashboard(props) {
         builtShields: 0,
         brokenShields: 0,
         optedOut: true,
+        waitlisted: false,
         county: '',
-        notifications: []        
+        notifications: []
     })
 
     const changeState = (id, val) => {
@@ -32,7 +34,6 @@ export default function Dashboard(props) {
     const initTopicSubscription = async () => {
         const fcmToken = await messaging().getToken()
         console.log('fcm token: ', fcmToken)
-        console.log('county: ', state.county)
         subscribeToTopic(fcmToken, state.county)
     }
 
@@ -46,16 +47,27 @@ export default function Dashboard(props) {
     }
 
     useEffect(() => {
-        console.log('User Info Context: ', JSON.stringify(userContext, null, 2))
+        console.log('UserContext', JSON.stringify(userContext, null, 2))
         changeState('uid', userContext.uid)
         changeState('name', userContext.name)
         changeState('roundNumber', userContext.currentRound)
         changeState('optedOut', userContext.optedOut)
-        changeState('assignedShields', userContext.numMasksAssigned)
-        changeState('builtShields', userContext.numMasksBuilt)
-        changeState('brokenShields', userContext.numMasksBroken)
+        changeState('waitlisted', userContext.waitlisted)
         changeState('notifications', userContext.notifications)
         changeState('county', userContext.county)
+
+        if (userContext.currentRound === -1) {
+            console.log('No round in progress')
+            setModalError('No round in progress right now.\n\nIf this is a mistake, an admin will be addressing it soon.')
+        } else if (userContext.optedOut && userContext.waitlisted) {
+            console.log('User is waitlisted for shields in current round')
+            setModalError(`You have been waitlisted for ${userContext.numMasksAssigned} shields.\n\nPlease wait for an admin to assign you kits.`)
+        } else {
+            console.log('User is constructing this round')
+            changeState('assignedShields', userContext.numMasksAssigned)
+            changeState('builtShields', userContext.numMasksBuilt)
+            changeState('brokenShields', userContext.numMasksBroken)
+        }
 
         requestUserPermission()
 
@@ -79,6 +91,8 @@ export default function Dashboard(props) {
                 uid={state.uid}
                 changeDashboardState={changeState} 
                 navigation={props.navigation}
+                error={modalError}
+                currRound={state.roundNumber}
             />
             <SafeAreaView style={styles.container}>
                 <View style={styles.welcomeContainer}>
