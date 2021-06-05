@@ -1,7 +1,7 @@
 # Common Health Project
 This repository contains a mobile app in React Native (IOS/Android) and a React admin interface for coordinating the construction of face shields in New Jersey. 
 
-The app development lead is Asher Gilani and the lead designer is Sarah Ryu. The project has been in operation for 3 months and has created over 10,000 face shields. Visit our [website](https://commonhealthproject.com/) for more details.
+The app development lead is Asher Gilani, the lead designer is Sarah Ryu, and the product manager is Parth Agrawal. The project has been in operation for 3 months and has created over 10,000 face shields. Visit our [website](https://commonhealthproject.com/) for more details.
 
 # App Overview
 ### Signup/Login System with Firebase
