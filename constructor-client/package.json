@@ -36,7 +36,7 @@
     "react-native-timeline-flatlist": "^0.7.2",
     "react-native-unordered-list": "^1.0.4",
     "react-native-vector-icons": "^6.6.0",
-    "react-native-webview": "^10.3.1",
+    "react-native-webview": "^11.0.0",
     "react-navigation": "^4.3.9",
     "react-navigation-stack": "^2.7.0"
   },
